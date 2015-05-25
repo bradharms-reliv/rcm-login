@@ -88,13 +88,11 @@ return [
             ],
         ],
     ],
-    'service_manager' => [
-
+    'controllers' => [
         'factories' => [
             'RcmLogin' => 'RcmLogin\Factory\PluginControllerFactory',
             'RcmResetPassword' => 'RcmLogin\Factory\ResetPasswordPluginControllerFactory',
             'RcmCreateNewPassword' => 'RcmLogin\Factory\PluginControllerFactory',
         ]
-
     ],
 ];

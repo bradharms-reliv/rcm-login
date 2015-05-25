@@ -17,8 +17,13 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class PluginControllerFactory implements FactoryInterface
 {
 
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $controllerMgr)
     {
+        /** @var \Zend\Mvc\Controller\ControllerManager $cm For IDE */
+        $cm = $controllerMgr;
+
+        /** @var ServiceLocatorInterface $serviceLocator */
+        $serviceLocator = $cm->getServiceLocator();
 
         $controller = new PluginController(
             $serviceLocator->get('config'),
