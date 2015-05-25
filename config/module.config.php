@@ -92,7 +92,7 @@ return [
         'factories' => [
             'RcmLogin' => 'RcmLogin\Factory\PluginControllerFactory',
             'RcmResetPassword' => 'RcmLogin\Factory\ResetPasswordPluginControllerFactory',
-            'RcmCreateNewPassword' => 'RcmLogin\Factory\PluginControllerFactory',
+            'RcmCreateNewPassword' => 'RcmLogin\Factory\CreatePasswordPluginControllerFactory',
         ]
     ],
 ];
