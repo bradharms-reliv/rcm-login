@@ -1,0 +1,10 @@
+
+.RcmResetPassword label {
+    display: block;
+}
+
+.RcmResetPassword .checkBoxWrap label {
+    display: inline;
+}
+
+

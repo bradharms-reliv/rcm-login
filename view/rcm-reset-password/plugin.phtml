@@ -1,0 +1,96 @@
+<?php
+
+$this->headLink()->appendStylesheet(
+    $this->basePath() . '/modules/rcm-login/style.css'
+);
+$this->headScript()->appendFile(
+    $this->basePath() . '/modules/rcm-login/rcm-reset-password.js',
+    'text/javascript'
+);
+$form = $this->form;
+$form->prepare();
+?>
+    <script type="text/javascript">
+        $(function () {
+            new RcmResetPassword(
+                <?=  $this->instanceId?>,
+                <?=  json_encode($this->instanceConfig['translate'])?>
+            );
+        });
+    </script>
+
+    <div class="error"></div>
+
+<?php
+echo $this->form()->openTag($form);
+//Helps prevent this form's posts from effecting other plugins
+echo $this->formInput($form->get('rcmPluginName'));
+?>
+
+    <table width="60%">
+
+        <tr>
+            <td>
+                <div data-richEdit="top">
+                    <?= $this->instanceConfig['top'] ?>
+                </div>
+            </td>
+        </tr>
+
+        <?php if ($this->postSuccess): ?>
+
+            <tr>
+                <td>
+                    <?= $this->instanceConfig['thankYou'] ?>
+                </td>
+            </tr>
+
+        <?php else: ?>
+            <tr>
+                <td>
+                    <p>&nbsp;</p>
+                </td>
+            </tr>
+            <tr>
+                <td height="10px">
+                    <div class="error">
+                        <?= isset($error) ? $error : '' ?>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>&nbsp;</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <?= $this->rcmLabel($form->get('rcn')); ?>
+                    <?= $this->formInput($form->get('rcn')); ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>&nbsp;</p>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <button class="btn btn-primary" type="submit">
+                        <?=
+                        $this->rcmTextEdit(
+                            'button',
+                            'Continue',
+                            'span'
+                        )
+                        ?>
+                    </button>
+                </td>
+            </tr>
+
+        <?php endif ?>
+
+    </table>
+
+<?= $this->form()->closeTag($form); ?>
