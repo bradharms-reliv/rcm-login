@@ -33,12 +33,21 @@ return [
             'uncategorizedErrorRedirect' => "/account-issue"
         ],
         'RcmResetPassword' => [
-            'type' => 'Reliv',
+            'type' => 'Common',
             'display' => 'Reset Password',
             'tooltip' => 'Reset Password',
             'icon' => '',
             'defaultInstanceConfig' => include
                 __DIR__ . '/resetPasswordDefaultInstanceConfig.php',
+            'canCache' => false,
+        ],
+        'RcmCreateNewPassword' => [
+            'type' => 'Common',
+            'display' => 'Create New Password',
+            'tooltip' => 'Create New Password',
+            'icon' => '',
+            'defaultInstanceConfig' => include
+                __DIR__ . '/createPasswordDefaultInstanceConfig.php',
             'canCache' => false,
         ],
     ],
@@ -74,6 +83,7 @@ return [
                 'modules/rcm-admin/js/rcm-admin.js' => [
                     'modules/rcm-login/rcm-login-edit.js',
                     'modules/rcm-login/rcm-reset-password-edit.js',
+                    'modules/rcm-login/rcm-create-new-password-edit.js',
                 ],
             ],
         ],
@@ -83,6 +93,7 @@ return [
         'factories' => [
             'RcmLogin' => 'RcmLogin\Factory\PluginControllerFactory',
             'RcmResetPassword' => 'RcmLogin\Factory\ResetPasswordPluginControllerFactory',
+            'RcmCreateNewPassword' => 'RcmLogin\Factory\PluginControllerFactory',
         ]
 
     ],

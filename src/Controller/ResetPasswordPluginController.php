@@ -102,6 +102,8 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
             $instanceConfig
         );
 
+        $view->setTemplate('rcm-reset-password/plugin');
+
         $view->setVariables(
             [
                 'form' => $form,
