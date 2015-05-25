@@ -101,15 +101,6 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
         // \Zend\ModuleManager\ModuleManager
     }
 
-    public function testGetAutoloaderConfig()
-    {
-        $module = new Module();
-
-        $result = $module->getAutoloaderConfig();
-
-        $this->assertTrue(is_array($result), 'Did not return array.');
-    }
-
     public function testGetConfig()
     {
         $module = new Module();

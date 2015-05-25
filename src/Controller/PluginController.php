@@ -34,9 +34,7 @@ use Zend\Authentication\Result;
  * @version   Release: 1.0
  *
  */
-class PluginController
-    extends BaseController
-    implements PluginInterface
+class PluginController extends BaseController implements PluginInterface
 {
 
     /**
@@ -44,7 +42,7 @@ class PluginController
      */
     protected $rcmUserService;
 
-    function __construct(
+    public function __construct(
         $config,
         RcmUserService $rcmUserService
     ) {
@@ -61,14 +59,12 @@ class PluginController
         if ($this->postIsForThisPlugin()) {
             $username = trim(
                 filter_var(
-                    $this->getRequest()->getPost('username')
-                    ,
+                    $this->getRequest()->getPost('username'),
                     FILTER_SANITIZE_STRING
                 )
             );
             $password = filter_var(
-                $this->getRequest()->getPost('password')
-                ,
+                $this->getRequest()->getPost('password'),
                 FILTER_SANITIZE_STRING
             );
 
@@ -83,20 +79,14 @@ class PluginController
             $authResult = $this->rcmUserService->authenticate($user);
 
             if (!$authResult->isValid()) {
-
                 if ($authResult->getCode() == Result::FAILURE_UNCATEGORIZED
                     && !empty($this->config['rcmPlugin']['RcmLogin']['uncategorizedErrorRedirect'])
                 ) {
-                    // @todo return $this->redirect()->toUrl($this->config['rcmPlugin']['RcmLogin']['uncategorizedErrorRedirect']);
-                    header(
-                        'Location: '
-                        . $this->config['rcmPlugin']['RcmLogin']['uncategorizedErrorRedirect']
-                    );
-                    exit();
+                    return $this->redirect()
+                        ->toUrl($this->config['rcmPlugin']['RcmLogin']['uncategorizedErrorRedirect']);
                 }
                 $error = $instanceConfig['translate']['invalid'];
             }
-
 
             if (!$error) {
                 $postSuccess = true;
@@ -104,7 +94,6 @@ class PluginController
         }
 
         if ($postSuccess) {
-
             $redirectUrl = $this->config['Rcm']['successfulLoginUrl'];
 
             /**
@@ -117,12 +106,9 @@ class PluginController
                     . filter_var($_GET['redirect'], FILTER_SANITIZE_URL);
             }
 
-            // @todo? $this->redirect()->toUrl($redirectUrl);
-            header('Location: ' . $redirectUrl);
-            exit();
+            return $this->redirect()->toUrl($redirectUrl);
 
         } else {
-
             $view = parent::renderInstance(
                 $instanceId,
                 $instanceConfig

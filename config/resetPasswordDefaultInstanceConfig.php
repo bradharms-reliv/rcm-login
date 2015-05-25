@@ -1,4 +1,10 @@
 <?php
+$hostname = 'localhost';
+
+if (!empty($_SERVER['HTTP_HOST'])) {
+    $hostname = $_SERVER['HTTP_HOST'];
+}
+
 return [
     'translate' => [
         'buttonProcessing' => 'Processing...',
@@ -17,8 +23,8 @@ return [
     'rcnLabel' => 'User Name:',
     'button' => 'Submit',
     'prospectEmail' => [
-        'fromEmail' => 'no-reply@'.$_SERVER['HTTP_HOST'],
-        'fromName' => $_SERVER['HTTP_HOST'].' Password Reset',
+        'fromEmail' => 'no-reply@'.$hostname,
+        'fromName' => $hostname.' Password Reset',
         'subject' => 'Reset Password',
         'body' => '<html>
 <body marginheight="0">

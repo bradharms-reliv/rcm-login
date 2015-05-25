@@ -21,7 +21,7 @@ use RcmLogin\Controller\PluginController;
 use RcmUser\User\Entity\User;
 use Zend\Authentication\Result;
 
-require_once __DIR__ . '/../../autoload.php';
+require_once __DIR__ . '/../autoload.php';
 
 class PluginControllerTest extends \PHPUnit_Framework_TestCase
 {

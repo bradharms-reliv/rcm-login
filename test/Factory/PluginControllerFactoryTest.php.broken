@@ -17,17 +17,15 @@
  * @link      https://github.com/reliv
  **/
 
-namespace RcmResetPasswordTest\Factory;
+namespace RcmLoginTest\Factory;
 
-require_once
-    __DIR__
-    . '/../../../../../../App/test/Base/RelivBaseTestCase.php';
-
-use RcmResetPassword\Controller\PluginController;
-use RcmResetPassword\Factory\PluginControllerFactory;
+use RcmLogin\Controller\PluginController;
+use RcmLogin\Factory\PluginControllerFactory;
 use AppTest\Base\RelivBaseTestCase;
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\ServiceManager\ServiceManager;
+
+require_once __DIR__ . '/../autoload.php';
 
 /**
  * Test for Factory PluginControllerFactory
@@ -44,22 +42,6 @@ use Zend\ServiceManager\ServiceManager;
  */
 class PluginControllerFactoryTest extends RelivBaseTestCase
 {
-    const PLUGIN_NAME = 'RcmResetPassword';
-
-    /**
-     * Setup for tests
-     *
-     * @return null
-     */
-    public function setUp()
-    {
-        $this->addModule('RcmResetPassword');
-        $this->addModule('RcmInstanceConfig');
-        $this->addModule('RcmUser');
-        $this->addModule('Vista');
-        parent::setUp();
-    }
-
     /**
      * Generic test for the constructor
      *
