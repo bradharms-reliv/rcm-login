@@ -1,6 +1,6 @@
 {
-  "name": "reliv/rcm-admin",
-  "description": "Provides all the basic admin screens for the Reliv Content manager",
+  "name": "reliv/rcm-login",
+  "description": "Provides all the basic login functions for the Reliv Content Manager",
   "license": "BSD-3-Clause",
   "keywords": [
     "reliv",
@@ -48,7 +48,7 @@
   },
   "autoload": {
     "psr-4": {
-      "RcmAdmin\\": "src/"
+      "RcmLogin\\": "src/"
     }
   }
 }
