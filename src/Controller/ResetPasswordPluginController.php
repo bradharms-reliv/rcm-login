@@ -70,7 +70,7 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
         RcmUserService $rcmUserManager
     ) {
         $this->entityMgr = $entityManager;
-        parent::__construct($config);
+        parent::__construct($config, 'RcmResetPassword');
         $this->templateMailer = $templateMailer;
         $this->rcmUserManager = $rcmUserManager;
     }
@@ -89,7 +89,7 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
         $postSuccess = false;
         $error = '';
 
-        if ($this->postIsForThisPlugin('RcmResetPassword')) {
+        if ($this->postIsForThisPlugin()) {
             $error = $this->handlePost($form, $instanceConfig);
 
             if (empty($error)) {
