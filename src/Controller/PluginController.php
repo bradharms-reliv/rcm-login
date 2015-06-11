@@ -21,6 +21,7 @@ use Rcm\Plugin\PluginInterface;
 use Rcm\Plugin\BaseController;
 use RcmUser\Service\RcmUserService;
 use Zend\Authentication\Result;
+use Zend\EventManager\Event;
 
 /**
  * Plugin Controller
@@ -57,24 +58,11 @@ class PluginController extends BaseController implements PluginInterface
         $username = null;
 
         if ($this->postIsForThisPlugin()) {
-            $username = trim(
-                filter_var(
-                    $this->getRequest()->getPost('username'),
-                    FILTER_SANITIZE_STRING
-                )
-            );
-            $password = filter_var(
-                $this->getRequest()->getPost('password'),
-                FILTER_SANITIZE_STRING
-            );
+            $user = $this->getUser();
 
-            if (empty($username) || empty($password)) {
+            if (empty($user)) {
                 $error = $instanceConfig['translate']['missing'];
             }
-
-            $user = $this->rcmUserService->buildNewUser();
-            $user->setUsername($username);
-            $user->setPassword($password);
 
             $authResult = $this->rcmUserService->authenticate($user);
 
@@ -85,6 +73,7 @@ class PluginController extends BaseController implements PluginInterface
                     return $this->redirect()
                         ->toUrl($this->config['rcmPlugin']['RcmLogin']['uncategorizedErrorRedirect']);
                 }
+
                 $error = $instanceConfig['translate']['invalid'];
             }
 
@@ -94,36 +83,57 @@ class PluginController extends BaseController implements PluginInterface
         }
 
         if ($postSuccess) {
-            $redirectUrl = $this->config['Rcm']['successfulLoginUrl'];
-
-            /**
-             * We let the successful login page handel redirects in case it
-             * wants to override them
-             *
-             */
-            if (isset($_GET['redirect'])) {
-                $redirectUrl .= '?redirect='
-                    . filter_var($_GET['redirect'], FILTER_SANITIZE_URL);
-            }
-
-            return $this->redirect()->toUrl($redirectUrl);
-
-        } else {
-            $view = parent::renderInstance(
-                $instanceId,
-                $instanceConfig
+            $parms = array(
+                'request' => $this->getRequest(),
+                'response' => $this->getResponse()
             );
 
-            $view->setVariables(
-                [
-                    'error' => $error,
-                    'username' => $username,
-                ]
-            );
+            $event = new Event('LoginSuccessEvent', $this, $parms);
+            $eventManager = $this->getEventManager();
+
+            $eventManager->trigger($event);
+
+            return $this->getResponse();
 
         }
 
+        $view = parent::renderInstance(
+            $instanceId,
+            $instanceConfig
+        );
+
+        $view->setVariables(
+            [
+                'error' => $error,
+                'username' => $username,
+            ]
+        );
 
         return $view;
+    }
+
+    protected function getUser()
+    {
+        $username = trim(
+            filter_var(
+                $this->getRequest()->getPost('username'),
+                FILTER_SANITIZE_STRING
+            )
+        );
+
+        $password = filter_var(
+            $this->getRequest()->getPost('password'),
+            FILTER_SANITIZE_STRING
+        );
+
+        if (empty($username) || empty($password)) {
+            return null;
+        }
+
+        $user = $this->rcmUserService->buildNewUser();
+        $user->setUsername($username);
+        $user->setPassword($password);
+
+        return $user;
     }
 }
