@@ -53,49 +53,8 @@ class PluginController extends BaseController implements PluginInterface
 
     public function renderInstance($instanceId, $instanceConfig)
     {
-        $postSuccess = false;
         $error = null;
         $username = null;
-
-        if ($this->postIsForThisPlugin()) {
-            $user = $this->getUser();
-
-            if (empty($user)) {
-                $error = $instanceConfig['translate']['missing'];
-            }
-
-            $authResult = $this->rcmUserService->authenticate($user);
-
-            if (!$authResult->isValid()) {
-                if ($authResult->getCode() == Result::FAILURE_UNCATEGORIZED
-                    && !empty($this->config['rcmPlugin']['RcmLogin']['uncategorizedErrorRedirect'])
-                ) {
-                    return $this->redirect()
-                        ->toUrl($this->config['rcmPlugin']['RcmLogin']['uncategorizedErrorRedirect']);
-                }
-
-                $error = $instanceConfig['translate']['invalid'];
-            }
-
-            if (!$error) {
-                $postSuccess = true;
-            }
-        }
-
-        if ($postSuccess) {
-            $parms = array(
-                'request' => $this->getRequest(),
-                'response' => $this->getResponse()
-            );
-
-            $event = new Event('LoginSuccessEvent', $this, $parms);
-            $eventManager = $this->getEventManager();
-
-            $eventManager->trigger($event);
-
-            return $this->getResponse();
-
-        }
 
         $view = parent::renderInstance(
             $instanceId,
@@ -108,6 +67,51 @@ class PluginController extends BaseController implements PluginInterface
                 'username' => $username,
             ]
         );
+
+        if (!$this->postIsForThisPlugin()) {
+            return $view;
+        }
+
+        $user = $this->getUser();
+
+        // Invalid User
+        if (empty($user)) {
+            $error = $instanceConfig['translate']['missing'];
+            $view->setVariable('error', $error);
+
+            return $view;
+        }
+
+        /** @var \Zend\Authentication\Result $authResult */
+        $authResult = $this->rcmUserService->authenticate($user);
+
+        // Valid auth
+        if ($authResult->isValid()) {
+            $parms = array(
+                'request' => $this->getRequest(),
+                'response' => $this->getResponse()
+            );
+
+            $event = new Event('LoginSuccessEvent', $this, $parms);
+            $eventManager = $this->getEventManager();
+
+            $eventManager->trigger($event);
+
+            return $this->getResponse();
+        }
+
+        // Invalid Auth
+        if ($authResult->getCode() == Result::FAILURE_UNCATEGORIZED
+            && !empty($this->config['rcmPlugin']['RcmLogin']['uncategorizedErrorRedirect'])
+        ) {
+            return $this->redirect()
+                ->toUrl(
+                    $this->config['rcmPlugin']['RcmLogin']['uncategorizedErrorRedirect']
+                );
+        }
+
+        $error = $instanceConfig['translate']['invalid'];
+        $view->setVariable('error', $error);
 
         return $view;
     }
