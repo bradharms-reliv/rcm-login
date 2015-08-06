@@ -19,3 +19,4 @@ matrix:
   fast_finish: true
   allow_failures:
     - php: '7.0'
+sudo: false
