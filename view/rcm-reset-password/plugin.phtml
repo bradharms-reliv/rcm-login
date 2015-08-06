@@ -10,16 +10,16 @@ $this->headScript()->appendFile(
 $form = $this->form;
 $form->prepare();
 ?>
-    <script type="text/javascript">
-        $(function () {
-            new RcmResetPassword(
-                <?=  $this->instanceId?>,
-                <?=  json_encode($this->instanceConfig['translate'])?>
-            );
-        });
-    </script>
+<script type="text/javascript">
+    $(function () {
+        new RcmResetPassword(
+            <?=  $this->instanceId?>,
+            <?=  json_encode($this->instanceConfig['translate'])?>
+        );
+    });
+</script>
 
-    <div class="error"></div>
+<div class="error"></div>
 
 <?php
 echo $this->form()->openTag($form);
@@ -27,8 +27,18 @@ echo $this->form()->openTag($form);
 echo $this->formInput($form->get('rcmPluginName'));
 ?>
 
-    <table width="60%">
+<table width="60%">
+    <?php if ($this->postSuccess): ?>
 
+        <tr>
+            <td>
+                <br><br><strong>
+                    <?= $this->translate('If you entered valid information and we have an email on file for your account, you will receive an email shortly that you can use to reset your password. Don\'t forget to check your spam folder') ?>
+                </strong>
+            </td>
+        </tr>
+
+    <?php else: ?>
         <tr>
             <td>
                 <div data-richEdit="top">
@@ -36,61 +46,51 @@ echo $this->formInput($form->get('rcmPluginName'));
                 </div>
             </td>
         </tr>
+        <tr>
+            <td>
+                <p>&nbsp;</p>
+            </td>
+        </tr>
+        <tr>
+            <td height="10px">
+                <div class="error">
+                    <?= isset($error) ? $this->translate($error) : '' ?>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&nbsp;</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?= $this->rcmLabel($form->get('rcn')); ?>
+                <?= $this->formInput($form->get('rcn')); ?>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&nbsp;</p>
+            </td>
+        </tr>
 
-        <?php if ($this->postSuccess): ?>
+        <tr>
+            <td>
+                <button class="btn btn-primary" type="submit">
+                    <?=
+                    $this->rcmTextEdit(
+                        'button',
+                        'Continue',
+                        'span'
+                    )
+                    ?>
+                </button>
+            </td>
+        </tr>
 
-            <tr>
-                <td>
-                    <?= $this->instanceConfig['thankYou'] ?>
-                </td>
-            </tr>
+    <?php endif ?>
 
-        <?php else: ?>
-            <tr>
-                <td>
-                    <p>&nbsp;</p>
-                </td>
-            </tr>
-            <tr>
-                <td height="10px">
-                    <div class="error">
-                        <?= isset($error) ? $error : '' ?>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p>&nbsp;</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <?= $this->rcmLabel($form->get('rcn')); ?>
-                    <?= $this->formInput($form->get('rcn')); ?>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p>&nbsp;</p>
-                </td>
-            </tr>
-
-            <tr>
-                <td>
-                    <button class="btn btn-primary" type="submit">
-                        <?=
-                        $this->rcmTextEdit(
-                            'button',
-                            'Continue',
-                            'span'
-                        )
-                        ?>
-                    </button>
-                </td>
-            </tr>
-
-        <?php endif ?>
-
-    </table>
+</table>
 
 <?= $this->form()->closeTag($form); ?>

@@ -65,8 +65,8 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
     /**
      * __construct
      *
-     * @param EntityManager  $entityManager  entityManager
-     * @param null           $config         config
+     * @param EntityManager $entityManager entityManager
+     * @param null $config config
      * @param TemplateMailer $templateMailer templateMailer
      * @param RcmUserService $rcmUserManager rcmUserManager
      */
@@ -85,7 +85,7 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
     /**
      * Plugin Action - Returns the guest-facing view model for this plugin
      *
-     * @param int   $instanceId     plugin instance id
+     * @param int $instanceId plugin instance id
      * @param array $instanceConfig Instance Config
      *
      * @return \Zend\View\Model\ViewModel
@@ -99,13 +99,16 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
             $instanceConfig
         );
 
-        $view->setTemplate('rcm-reset-password/plugin');
+        if ($this->params()->fromQuery('invalidLink')) {
+            $error = 'The password reset link you used is invalid. It may be expired or have already been used. Please try again below.';
+        }
 
+        $view->setTemplate('rcm-reset-password/plugin');
         $view->setVariables(
             [
                 'form' => $form,
                 'postSuccess' => false,
-                'error' => null
+                'error' => $error
             ]
         );
 
@@ -115,11 +118,13 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
 
         // Handle Post
         $error = $this->handlePost($form, $instanceConfig);
-        $view->setVariable('error', $error);
 
         if (empty($error)) {
             $view->setVariable('postSuccess', true);
         }
+
+        $view->setVariable('error', $error);
+
 
         return $view;
     }
@@ -132,14 +137,16 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
      *
      * @return null|string
      */
-    protected function handlePost(ResetPasswordForm $form, $instanceConfig)
-    {
+    protected function handlePost(
+        ResetPasswordForm $form,
+        $instanceConfig
+    ) {
         $resetPw = new ResetPassword();
         $form->setInputFilter($resetPw->getInputFilter());
         $form->setData($this->getRequest()->getPost());
 
         if (!$form->isValid()) {
-            return $instanceConfig['translate']['notFound'];
+            return;
         }
 
         $formData = $form->getData();
@@ -151,11 +158,11 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
         try {
             $result = $this->rcmUserManager->readUser($user);
         } catch (DistributorNotFoundException $e) {
-            return $instanceConfig['translate']['notFound'];
+            return;
         }
 
         if (!$result->isSuccess()) {
-            return $instanceConfig['translate']['notFound'];
+            return;
         }
 
         $user = $result->getUser();
@@ -164,7 +171,7 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
         $profile = $user->getProperty('VistaApiUserProfile');
 
         if (!$profile instanceof Profile || !$profile->getEmail()) {
-            return $instanceConfig['translate']['notFound'];
+            return;
         }
 
         $resetPw->setRcn($rcn);
@@ -177,7 +184,7 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
             $instanceConfig
         );
 
-        return null;
+        return;
     }
 
     /**
@@ -186,7 +193,8 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
      * @param $userEmail
      * @param $instanceConfig
      */
-    protected function sendEmail(
+    protected
+    function sendEmail(
         ResetPassword $resetPw,
         $rcn,
         $userEmail,

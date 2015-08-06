@@ -6,14 +6,6 @@ if (!empty($_SERVER['HTTP_HOST'])) {
 }
 
 return [
-    'translate' => [
-        'buttonProcessing' => 'Processing...',
-        'notFound' => 'User name not found',
-        'emailNotFound' => 'no email on record'
-    ],
-    'thankYou' => '
-        <br><p><strong>Your request has been submitted. Thank You!</strong></p>
-    ',
     'top' => '
         <h1>Reset Password</h1>
         <div>

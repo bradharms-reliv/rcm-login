@@ -184,8 +184,7 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
 
     protected function notAuthorized()
     {
-        $response = new Response();
-        $response->setStatusCode(401);
-        return $response;
+
+        return $this->redirect()->toUrl('/forgot-password?invalidLink=1');
     }
 }
