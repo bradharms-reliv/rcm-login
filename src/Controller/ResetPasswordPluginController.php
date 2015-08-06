@@ -100,7 +100,8 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
         );
 
         if ($this->params()->fromQuery('invalidLink')) {
-            $error = 'The password reset link you used is invalid. It may be expired or have already been used. Please try again below.';
+            $error = 'The password reset link you used is invalid.'
+                . ' It may be expired or have already been used. Please try again below.';
         }
 
         $view->setTemplate('rcm-reset-password/plugin');
@@ -193,8 +194,7 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
      * @param $userEmail
      * @param $instanceConfig
      */
-    protected
-    function sendEmail(
+    protected function sendEmail(
         ResetPassword $resetPw,
         $rcn,
         $userEmail,
