@@ -17,12 +17,12 @@
  */
 namespace RcmLogin\Controller;
 
+use App\Controller\TemplateMailer;
 use Doctrine\ORM\EntityManager;
 use Rcm\Plugin\BaseController;
 use Rcm\Plugin\PluginInterface;
 use RcmLogin\Entity\ResetPassword;
 use RcmLogin\Form\ResetPasswordForm;
-use App\Controller\TemplateMailer;
 use RcmUser\Service\RcmUserService;
 use Vista\Entity\Profile;
 use Vista\Exception\DistributorNotFoundException;
@@ -40,7 +40,8 @@ use Zend\Mail\Exception\InvalidArgumentException;
  * @version   Release: 1.0
  *
  */
-class ResetPasswordPluginController extends BaseController implements PluginInterface
+class ResetPasswordPluginController extends BaseController implements
+    PluginInterface
 {
 
     /**
@@ -175,7 +176,13 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
             return;
         }
 
-        $resetPw->setRcn($rcn);
+        $profileRcn = $profile->getRcn();
+        $profileUsername = $profile->getUsername();
+
+        if ($profileUsername  == $rcn || $profileRcn == $rcn) {
+            $resetPw->setRcn($profileRcn);
+        }
+
         $this->entityMgr->persist($resetPw);
         $this->entityMgr->flush();
         $this->sendEmail(
@@ -208,8 +215,10 @@ class ResetPasswordPluginController extends BaseController implements PluginInte
                     'name' => '',
                     'rcn' => $rcn,
                     'url' =>
-                        'https://' . $_SERVER['HTTP_HOST'] . '/reset-password?id='
-                        . $resetPw->getResetId() . '&key=' . $resetPw->getHashKey()
+                        'https://' . $_SERVER['HTTP_HOST']
+                        . '/reset-password?id='
+                        . $resetPw->getResetId() . '&key='
+                        . $resetPw->getHashKey()
                 ]
             );
         } catch (InvalidArgumentException $e) {
