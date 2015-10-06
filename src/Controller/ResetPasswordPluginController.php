@@ -24,7 +24,6 @@ use Rcm\Plugin\PluginInterface;
 use RcmLogin\Entity\ResetPassword;
 use RcmLogin\Form\ResetPasswordForm;
 use RcmUser\Service\RcmUserService;
-use Vista\Entity\Profile;
 use Vista\Exception\DistributorNotFoundException;
 use Zend\Mail\Exception\InvalidArgumentException;
 
@@ -168,19 +167,15 @@ class ResetPasswordPluginController extends BaseController implements
         }
 
         $user = $result->getUser();
-
-        /** @var \Vista\Entity\Profile $profile */
-        $profile = $user->getProperty('VistaApiUserProfile');
-
-        if (!$profile instanceof Profile || !$profile->getEmail()) {
+        if (!$user->getEmail()) {
             return;
         }
 
-        $profileRcn = $profile->getRcn();
-        $profileUsername = $profile->getUsername();
+        $userId = $user->getId();
+        $userName = $user->getUsername();
 
-        if ($profileUsername  == $rcn || $profileRcn == $rcn) {
-            $resetPw->setRcn($profileRcn);
+        if ($userId == $rcn || $userName == $rcn) {
+            $resetPw->setRcn($userId);
         }
 
         $this->entityMgr->persist($resetPw);
@@ -188,7 +183,7 @@ class ResetPasswordPluginController extends BaseController implements
         $this->sendEmail(
             $resetPw,
             $rcn,
-            $profile->getEmail(),
+            $user->getEmail(),
             $instanceConfig
         );
 
