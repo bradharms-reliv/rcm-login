@@ -171,12 +171,8 @@ class ResetPasswordPluginController extends BaseController implements
             return;
         }
 
-        $userId = $user->getId();
-        $userName = $user->getUsername();
+        $resetPw->setRcn($user->getId());
 
-        if ($userId == $rcn || $userName == $rcn) {
-            $resetPw->setRcn($userId);
-        }
 
         $this->entityMgr->persist($resetPw);
         $this->entityMgr->flush();
