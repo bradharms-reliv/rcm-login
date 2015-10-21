@@ -26,7 +26,7 @@ class ResetPasswordForm extends Form
 
         $this->add(
             [
-                'name' => 'rcn',
+                'name' => 'userId',
                 'attributes' => ['type' => 'text']
             ]
         );

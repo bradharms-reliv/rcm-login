@@ -22,6 +22,18 @@ use Zend\InputFilter\InputFilter;
 class ResetPassword
 {
     /**
+     * @TODO DELETE THIS COLUMN/PROPERTY.
+     * This was only here to preserve legacy DB
+     * compatibility until a release was done in
+     * October 2015.
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    protected $rcn='todo-delete-this-col';
+
+    /**
      * @var int Auto-Incremented Primary Key
      *
      * @ORM\Id
@@ -37,12 +49,13 @@ class ResetPassword
      */
     protected $createdDate;
 
+
     /**
      * @var string
      *
      * @ORM\Column(type="string")
      */
-    protected $rcn;
+    protected $userId;
 
     /**
      * @var string
@@ -69,7 +82,7 @@ class ResetPassword
         $inputFilter->add(
             $factory->createInput(
                 [
-                    'name' => 'rcn',
+                    'name' => 'userId',
                     'required' => true,
                     'filters' => [
                         new \Zend\Filter\StripTags(),
@@ -115,19 +128,19 @@ class ResetPassword
     }
 
     /**
-     * @param string $rcn
+     * @param string $userId
      */
-    public function setRcn($rcn)
+    public function setUserId($userId)
     {
-        $this->rcn = $rcn;
+        $this->userId = $userId;
     }
 
     /**
      * @return string
      */
-    public function getRcn()
+    public function getUserId()
     {
-        return $this->rcn;
+        return $this->userId;
     }
 
     /**

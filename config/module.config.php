@@ -54,7 +54,7 @@ return [
 
     'doctrine' => [
         'driver' => [
-            'RcmResetPassword' => [
+            'RcmLogin' => [
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
                 'paths' => [
@@ -63,7 +63,7 @@ return [
             ],
             'orm_default' => [
                 'drivers' => [
-                    'RcmResetPassword' => 'RcmResetPassword'
+                    'RcmLogin' => 'RcmLogin'
                 ]
             ]
         ]

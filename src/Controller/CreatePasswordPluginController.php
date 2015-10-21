@@ -110,7 +110,7 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
             $error = $this->handlePost(
                 $form,
                 $instanceConfig,
-                $passwordEntity->getRcn()
+                $passwordEntity->getUserId()
             );
 
             if (!$error) {
