@@ -151,10 +151,10 @@ class ResetPasswordPluginController extends BaseController implements
         }
 
         $formData = $form->getData();
-        $rcn = $formData['rcn'];
+        $userId = $formData['userId'];
 
         $user = $this->rcmUserManager->buildNewUser();
-        $user->setUsername($rcn);
+        $user->setUsername($userId);
 
         try {
             $result = $this->rcmUserManager->readUser($user);
@@ -171,14 +171,14 @@ class ResetPasswordPluginController extends BaseController implements
             return;
         }
 
-        $resetPw->setRcn($user->getId());
+        $resetPw->setUserId($user->getId());
 
 
         $this->entityMgr->persist($resetPw);
         $this->entityMgr->flush();
         $this->sendEmail(
             $resetPw,
-            $rcn,
+            $userId,
             $user->getEmail(),
             $instanceConfig
         );
@@ -188,13 +188,13 @@ class ResetPasswordPluginController extends BaseController implements
 
     /**
      * @param $resetPw
-     * @param $rcn
+     * @param $userId
      * @param $userEmail
      * @param $instanceConfig
      */
     protected function sendEmail(
         ResetPassword $resetPw,
-        $rcn,
+        $userId,
         $userEmail,
         $instanceConfig
     ) {
@@ -204,7 +204,7 @@ class ResetPasswordPluginController extends BaseController implements
                 $instanceConfig['prospectEmail'],
                 [
                     'name' => '',
-                    'rcn' => $rcn,
+                    'userId' => $userId,
                     'url' =>
                         'https://' . $_SERVER['HTTP_HOST']
                         . '/reset-password?id='

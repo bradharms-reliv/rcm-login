@@ -12,7 +12,7 @@ return [
         Enter your user name.  An email to reset your password will be sent to your email address on file.
         </div>
     ',
-    'rcnLabel' => 'User Name:',
+    'userIdLabel' => 'User Name:',
     'button' => 'Submit',
     'prospectEmail' => [
         'fromEmail' => 'no-reply@'.$hostname,
@@ -26,7 +26,7 @@ return [
           <td valign="top"><blockquote><font face="Verdana, Arial, Helvetica, sans-serif"
               size="2"><br>
               Click on the link below to reset your password:<br><br>
-             <strong>RCN</strong>: {rcn}<br><br>
+             <strong>RCN</strong>: {userId}<br><br>
              <a href="{url}">Reset your password.</a><br>
 
             </font></blockquote></td>
