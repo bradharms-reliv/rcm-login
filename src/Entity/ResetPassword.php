@@ -31,7 +31,7 @@ class ResetPassword
      *
      * @ORM\Column(type="string")
      */
-    protected $rcn='todo-delete-this-col';
+    protected $rcn = 'todo-delete-this-col';
 
     /**
      * @var int Auto-Incremented Primary Key
