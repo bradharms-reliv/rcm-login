@@ -44,7 +44,7 @@ class Login
      *
      * @return Response
      */
-    public function LoginSuccess(Event $event)
+    public function loginSuccess(Event $event)
     {
         $serviceManager = $event->getTarget()->getServiceLocator();
 

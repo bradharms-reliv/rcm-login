@@ -97,7 +97,7 @@ class PluginController extends BaseController implements PluginInterface
             $eventManager = $this->getEventManager();
 
             /** @var \Zend\EventManager\ResponseCollection $responses */
-            $responses = $eventManager->trigger($event, null, [], function($v){
+            $responses = $eventManager->trigger($event, null, [], function ($v) {
                 return ($v instanceof ResponseInterface);
             });
 

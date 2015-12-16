@@ -70,7 +70,7 @@ class Module
         $eventManager->attach(
             'Zend\Mvc\Controller\AbstractActionController',
             'LoginSuccessEvent',
-            [$loginEventListener, 'LoginSuccess'],
+            [$loginEventListener, 'loginSuccess'],
             10000
         );
     }
