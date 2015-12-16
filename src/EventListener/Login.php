@@ -46,6 +46,7 @@ class Login
      */
     public function loginSuccess(Event $event)
     {
+        /** @var \Zend\ServiceManager\ServiceManager $serviceManager */
         $serviceManager = $event->getTarget()->getServiceLocator();
 
         $config = $serviceManager->get('config');
@@ -53,7 +54,7 @@ class Login
         /** @var $request \Zend\Http\Request */
         $request = $serviceManager->get('request');
 
-        $redirect = '';
+        $redirect = $request->getUri()->toString();
 
         if (!empty($config['rcmPlugin']['RcmLogin']['defaultSuccessRedirect'])) {
             $redirect = $config['rcmPlugin']['RcmLogin']['defaultSuccessRedirect'];

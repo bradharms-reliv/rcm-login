@@ -20,6 +20,7 @@ use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\MvcEvent;
 use Zend\Console\Request as ConsoleRequest;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
 /**
  * ZF2 Module Config.  Required by ZF2
@@ -59,16 +60,20 @@ class Module
         $serviceManager = $event->getApplication()->getServiceManager();
 
         //Add Login Event Listener
-        $loginEventListener = $serviceManager->get(
-            'RcmLogin\EventListener\Login'
-        );
+        try {
+            $loginEventListener = $serviceManager->get(
+                'RcmLogin\EventListener\Login'
+            );
+        } catch (ServiceNotFoundException $e) {
+            return;
+        }
 
         /** @var \Zend\EventManager\EventManager $eventManager */
         $eventManager = $event->getApplication()->getEventManager()->getSharedManager();
 
         // Check for redirects from the CMS
         $eventManager->attach(
-            'Zend\Mvc\Controller\AbstractActionController',
+            'RcmLogin\Controller\PluginController',
             'LoginSuccessEvent',
             [$loginEventListener, 'loginSuccess'],
             10000
