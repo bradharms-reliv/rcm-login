@@ -46,4 +46,32 @@ class Module
     {
         return include __DIR__ . '/../config/module.config.php';
     }
+
+    /**
+     * Bootstrap For Login.
+     *
+     * @param MvcEvent $event Zend MVC Event
+     *
+     * @return null
+     */
+    public function onBootstrap(MvcEvent $event)
+    {
+        $serviceManager = $event->getApplication()->getServiceManager();
+
+        //Add Login Event Listener
+        $loginEventListener = $serviceManager->get(
+            'RcmLogin\EventListener\Login'
+        );
+
+        /** @var \Zend\EventManager\EventManager $eventManager */
+        $eventManager = $event->getApplication()->getEventManager()->getSharedManager();
+
+        // Check for redirects from the CMS
+        $eventManager->attach(
+            'Zend\Mvc\Controller\AbstractActionController',
+            'LoginSuccessEvent',
+            [$loginEventListener, 'LoginSuccess'],
+            10000
+        );
+    }
 }

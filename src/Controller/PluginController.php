@@ -22,6 +22,7 @@ use Rcm\Plugin\BaseController;
 use RcmUser\Service\RcmUserService;
 use Zend\Authentication\Result;
 use Zend\EventManager\Event;
+use Zend\Stdlib\ResponseInterface;
 
 /**
  * Plugin Controller
@@ -95,7 +96,16 @@ class PluginController extends BaseController implements PluginInterface
             $event = new Event('LoginSuccessEvent', $this, $parms);
             $eventManager = $this->getEventManager();
 
-            $eventManager->trigger($event);
+            /** @var \Zend\EventManager\ResponseCollection $responses */
+            $responses = $eventManager->trigger($event, null, [], function($v){
+                return ($v instanceof ResponseInterface);
+            });
+
+            $response = $responses->last();
+
+            if ($response instanceof ResponseInterface) {
+                return $response;
+            }
 
             return $this->getResponse();
         }
