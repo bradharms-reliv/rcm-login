@@ -98,8 +98,12 @@ return [
     ],
 
     'service_manager' => [
+        'factories' => [
+            'RcmLogin\EventListener\Login' => 'RcmLogin\Factory\LoginEventListenerFactory',
+        ],
+
         'invokables' => [
-            'RcmLogin\EventListener\Login' => 'RcmLogin\EventListener\Login'
+            'RcmLogin\Filter\RedirectFilter' => 'RcmLogin\Filter\RedirectFilter'
         ],
     ],
 ];

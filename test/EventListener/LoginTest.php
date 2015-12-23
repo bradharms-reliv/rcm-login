@@ -22,6 +22,9 @@ class LoginTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $uriMock;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $filterMock;
+
     protected function setUp()
     {
         $this->controllerMock = $this->getMockBuilder('RcmLogin\Controller\PluginController')
@@ -43,6 +46,10 @@ class LoginTest extends \PHPUnit_Framework_TestCase
         $this->uriMock = $this->getMockBuilder('Zend\Uri\Http')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->filterMock= $this->getMockBuilder('RcmLogin\Filter\RedirectFilter')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     protected function tearDown()
@@ -51,6 +58,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
         $this->serviceLocatorMock = null;
         $this->eventMock = null;
         $this->requestMock = null;
+        $this->filterMock = null;
     }
 
     public function testLoginSuccessNoConfig()
@@ -69,9 +77,9 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->method('getQuery')
             ->with(
                 $this->equalTo('redirect'),
-                $this->equalTo($page)
+                null
             )
-            ->will($this->returnValue($page));
+            ->will($this->returnValue(null));
 
         $this->requestMock->expects($this->once())
             ->method('getUri')
@@ -92,7 +100,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValueMap($map));
 
-        $listener = new Login();
+        $listener = new Login($this->filterMock);
 
         $result = $listener->loginSuccess($this->eventMock);
 
@@ -120,17 +128,15 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->method('getQuery')
             ->with(
                 $this->equalTo('redirect'),
-                $this->equalTo($configRedirect)
+                null
             )
-            ->will($this->returnValue($configRedirect));
+            ->will($this->returnValue(null));
 
-        $this->requestMock->expects($this->once())
-            ->method('getUri')
-            ->will($this->returnValue($this->uriMock));
+        $this->requestMock->expects($this->never())
+            ->method('getUri');
 
-        $this->uriMock->expects($this->once())
-            ->method('toString')
-            ->will($this->returnValue($page));
+        $this->uriMock->expects($this->never())
+            ->method('toString');
 
         $config['rcmPlugin']['RcmLogin']['defaultSuccessRedirect'] = $configRedirect;
 
@@ -143,7 +149,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValueMap($map));
 
-        $listener = new Login();
+        $listener = new Login($this->filterMock);
 
         $result = $listener->loginSuccess($this->eventMock);
 
@@ -172,17 +178,22 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->method('getQuery')
             ->with(
                 $this->equalTo('redirect'),
-                $this->equalTo($configRedirect)
+                null
             )
             ->will($this->returnValue($redirectQuery));
 
-        $this->requestMock->expects($this->once())
-            ->method('getUri')
-            ->will($this->returnValue($this->uriMock));
+        $this->filterMock->expects($this->once())
+            ->method('filter')
+            ->with(
+                $this->equalTo($redirectQuery)
+            )
+            ->will($this->returnValue($redirectQuery));
 
-        $this->uriMock->expects($this->once())
-            ->method('toString')
-            ->will($this->returnValue($page));
+        $this->requestMock->expects($this->never())
+            ->method('getUri');
+
+        $this->uriMock->expects($this->never())
+            ->method('toString');
 
         $config['rcmPlugin']['RcmLogin']['defaultSuccessRedirect'] = $configRedirect;
 
@@ -195,7 +206,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValueMap($map));
 
-        $listener = new Login();
+        $listener = new Login($this->filterMock);
 
         $result = $listener->loginSuccess($this->eventMock);
 
@@ -203,6 +214,6 @@ class LoginTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result->getStatusCode(), 302);
 
         $location = $result->getHeaders()->get('Location');
-        $this->assertEquals($location->getFieldValue(), $redirectQuery);
+        $this->assertEquals($redirectQuery, $location->getFieldValue());
     }
 }

@@ -20,6 +20,7 @@
 namespace RcmLogin\EventListener;
 
 use Zend\EventManager\Event;
+use Zend\Filter\FilterInterface;
 use Zend\Http\Response;
 
 /**
@@ -37,10 +38,23 @@ use Zend\Http\Response;
  */
 class Login
 {
+    /** @var FilterInterface  */
+    protected $filter;
+
+    /**
+     * Login constructor.
+     *
+     * @param FilterInterface $filter
+     */
+    public function __construct(FilterInterface $filter)
+    {
+        $this->filter = $filter;
+    }
+
     /**
      * LoginSuccess
      *
-     * @param MvcEvent $event event
+     * @param Event $event event
      *
      * @return Response
      */
@@ -54,13 +68,16 @@ class Login
         /** @var $request \Zend\Http\Request */
         $request = $serviceManager->get('request');
 
-        $redirect = $request->getUri()->toString();
+        $redirect = $request->getQuery('redirect', null);
+        $redirect = $this->filter->filter($redirect);
 
-        if (!empty($config['rcmPlugin']['RcmLogin']['defaultSuccessRedirect'])) {
+        if (empty($redirect)
+            && !empty($config['rcmPlugin']['RcmLogin']['defaultSuccessRedirect'])
+        ) {
             $redirect = $config['rcmPlugin']['RcmLogin']['defaultSuccessRedirect'];
+        } elseif (empty($redirect)) {
+            $redirect = $request->getUri()->toString();
         }
-
-        $redirect = $request->getQuery('redirect', $redirect);
 
         $response = new \Rcm\Http\Response();
         $response->setStatusCode(302);
