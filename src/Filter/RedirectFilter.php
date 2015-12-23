@@ -43,7 +43,8 @@ class RedirectFilter implements FilterInterface
      * @param mixed $value
      * @return string|null
      */
-    public function filter($value) {
+    public function filter($value)
+    {
         if (!$this->isValid($value)) {
             return null;
         }
