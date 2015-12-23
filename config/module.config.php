@@ -31,7 +31,8 @@ return [
                     '/defaultInstanceConfig.php',
             'canCache' => false,
             'uncategorizedErrorRedirect' => "/account-issue",
-            'defaultSuccessRedirect' => '/'
+            'defaultSuccessRedirect' => '/',
+            'redirectBlacklistPattern' => '/.+:\/\/|\/\//i',
         ],
         'RcmResetPassword' => [
             'type' => 'Common',
@@ -100,10 +101,8 @@ return [
     'service_manager' => [
         'factories' => [
             'RcmLogin\EventListener\Login' => 'RcmLogin\Factory\LoginEventListenerFactory',
-        ],
-
-        'invokables' => [
-            'RcmLogin\Filter\RedirectFilter' => 'RcmLogin\Filter\RedirectFilter'
+            'RcmLogin\Validator\RedirectValidator' => 'RcmLogin\Factory\RedirectValidatorFactory',
+            'RcmLogin\Filter\RedirectFilter' => 'RcmLogin\Factory\RedirectFilterFactory'
         ],
     ],
 ];

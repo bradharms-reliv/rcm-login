@@ -20,6 +20,7 @@
 namespace RcmLogin\Filter;
 
 use Zend\Filter\FilterInterface;
+use Zend\Validator\ValidatorInterface;
 
 /**
  * Filter for login redirect
@@ -37,6 +38,14 @@ use Zend\Filter\FilterInterface;
  */
 class RedirectFilter implements FilterInterface
 {
+    /** @var ValidatorInterface */
+    protected $validator;
+
+    public function __construct(ValidatorInterface $validator)
+    {
+        $this->validator = $validator;
+    }
+
     /**
      * Filter the redirect url
      *
@@ -45,21 +54,10 @@ class RedirectFilter implements FilterInterface
      */
     public function filter($value)
     {
-        if (!$this->isValid($value)) {
+        if (!$this->validator->isValid($value)) {
             return null;
         }
 
         return urldecode(filter_var($value, FILTER_SANITIZE_URL));
-    }
-
-    /**
-     * Insure that the redirect is not redirecting away from the site
-     *
-     * @param mixed $value
-     * @return string|null
-     */
-    protected function isValid($value)
-    {
-        return !preg_match('/.+:\/\/|\/\//i', $value);
     }
 }
