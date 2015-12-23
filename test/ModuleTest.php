@@ -142,7 +142,9 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
 
     public function testOnBootStrapWithListener()
     {
-        $mockListener = $this->getMockBuilder('RcmLogin\EventListener\Login')->getMock();
+        $mockListener = $this->getMockBuilder('RcmLogin\EventListener\Login')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockServiceManager = $this->getMockBuilder('Zend\ServiceManager\ServiceManager')
             ->disableOriginalConstructor()
