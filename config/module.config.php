@@ -30,7 +30,9 @@ return [
             'defaultInstanceConfig' => include __DIR__ .
                     '/defaultInstanceConfig.php',
             'canCache' => false,
-            'uncategorizedErrorRedirect' => "/account-issue"
+            'uncategorizedErrorRedirect' => "/account-issue",
+            'defaultSuccessRedirect' => '/',
+            'redirectBlacklistPattern' => '/.+:\/\/|\/\//i',
         ],
         'RcmResetPassword' => [
             'type' => 'Common',
@@ -93,6 +95,14 @@ return [
             'RcmLogin' => 'RcmLogin\Factory\PluginControllerFactory',
             'RcmResetPassword' => 'RcmLogin\Factory\ResetPasswordPluginControllerFactory',
             'RcmCreateNewPassword' => 'RcmLogin\Factory\CreatePasswordPluginControllerFactory',
-        ]
+        ],
+    ],
+
+    'service_manager' => [
+        'factories' => [
+            'RcmLogin\EventListener\Login' => 'RcmLogin\Factory\LoginEventListenerFactory',
+            'RcmLogin\Validator\RedirectValidator' => 'RcmLogin\Factory\RedirectValidatorFactory',
+            'RcmLogin\Filter\RedirectFilter' => 'RcmLogin\Factory\RedirectFilterFactory'
+        ],
     ],
 ];
