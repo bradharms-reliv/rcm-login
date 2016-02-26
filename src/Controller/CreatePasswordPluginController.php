@@ -146,7 +146,7 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
             }
 
             $user = $this->rcmUserService->buildNewUser();
-            $user->setUsername($userId);
+            $user->setId($userId);
 
             $result = $this->rcmUserService->readUser($user);
 
