@@ -1,21 +1,4 @@
 <?php
-/**
- * Service Factory for PluginController
- *
- * This file contains the factory needed to generate a PluginController.
- *
- * PHP version 5.3
- *
- * LICENSE: BSD
- *
- * @category  Reliv
- * @package   RcmCreateNewPassword
- * @author    Westin Shafer <wshafer@relivinc.com>
- * @copyright 2014 Reliv International
- * @license   License.txt New BSD License
- * @version   GIT: <git_id>
- * @link      https://github.com/reliv
- */
 
 namespace RcmLogin\Factory;
 
@@ -44,7 +27,7 @@ class CreatePasswordPluginControllerFactory implements FactoryInterface
      *
      * @param ServiceLocatorInterface $controllerMgr Zend Controller Manager
      *
-     * @return PluginController
+     * @return CreatePasswordPluginController
      */
 
     public function createService(ServiceLocatorInterface $controllerMgr)
@@ -60,9 +43,6 @@ class CreatePasswordPluginControllerFactory implements FactoryInterface
 
         $config = $serviceLocator->get('config');
 
-        /** @var \App\Controller\TemplateMailer $templateMailer */
-        $templateMailer = $serviceLocator->get('templateMailer');
-
         /** @var \RcmUser\Service\RcmUserService $rcmUserService */
         $rcmUserService = $serviceLocator->get(
             'RcmUser\Service\RcmUserService'
@@ -71,7 +51,6 @@ class CreatePasswordPluginControllerFactory implements FactoryInterface
         return new CreatePasswordPluginController(
             $entityManager,
             $config,
-            $templateMailer,
             $rcmUserService
         );
     }

@@ -1,20 +1,5 @@
 <?php
 
-/**
- * Plugin Controller
- *
- * This is the main controller for this plugin
- *
- * PHP version 5.3
- *
- * LICENSE: No License yet
- *
- * @category  Reliv
- * @author    Rod McNew <rmcnew@relivinc.com>
- * @copyright 2012 Reliv International
- * @license   License.txt New BSD License
- * @version   GIT: <git_id>
- */
 namespace RcmLogin\Controller;
 
 use Rcm\Plugin\PluginInterface;
@@ -44,6 +29,12 @@ class PluginController extends BaseController implements PluginInterface
      */
     protected $rcmUserService;
 
+    /**
+     * PluginController constructor.
+     *
+     * @param array          $config
+     * @param RcmUserService $rcmUserService
+     */
     public function __construct(
         $config,
         RcmUserService $rcmUserService
@@ -52,6 +43,14 @@ class PluginController extends BaseController implements PluginInterface
         $this->rcmUserService = $rcmUserService;
     }
 
+    /**
+     * renderInstance
+     *
+     * @param int   $instanceId
+     * @param array $instanceConfig
+     *
+     * @return mixed|\Zend\Http\Response|ResponseInterface|\Zend\View\Model\ViewModel
+     */
     public function renderInstance($instanceId, $instanceConfig)
     {
         $error = null;
@@ -126,6 +125,11 @@ class PluginController extends BaseController implements PluginInterface
         return $view;
     }
 
+    /**
+     * getUser
+     *
+     * @return null|\RcmUser\User\Entity\User
+     */
     protected function getUser()
     {
         $username = trim(

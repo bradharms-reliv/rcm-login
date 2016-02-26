@@ -1,21 +1,4 @@
 <?php
-/**
- * Service Factory for PluginController
- *
- * This file contains the factory needed to generate a PluginController.
- *
- * PHP version 5.3
- *
- * LICENSE: BSD
- *
- * @category  Reliv
- * @package   RcmResetPassword
- * @author    Westin Shafer <wshafer@relivinc.com>
- * @copyright 2014 Reliv International
- * @license   License.txt New BSD License
- * @version   GIT: <git_id>
- * @link      https://github.com/reliv
- */
 
 namespace RcmLogin\Factory;
 
@@ -43,9 +26,8 @@ class ResetPasswordPluginControllerFactory implements FactoryInterface
      *
      * @param ServiceLocatorInterface $controllerMgr Zend Controller Manager
      *
-     * @return PluginController
+     * @return ResetPasswordPluginController
      */
-
     public function createService(ServiceLocatorInterface $controllerMgr)
     {
         /** @var \Zend\Mvc\Controller\ControllerManager $cm For IDE */
@@ -59,8 +41,10 @@ class ResetPasswordPluginControllerFactory implements FactoryInterface
         /** @var \Doctrine\ORM\EntityManager $entityManager */
         $entityManager = $serviceLocator->get('Doctrine\ORM\EntityManager');
 
-        /** @var \App\Controller\TemplateMailer $templateMailer */
-        $templateMailer = $serviceLocator->get('templateMailer');
+        $mailerService = $config['rcmPlugin']['RcmResetPassword']['mailer'];
+
+        /** @var \RcmLogin\Email\Mailer $mailer */
+        $mailer = $serviceLocator->get($mailerService);
 
         /**
          * @var \RcmUser\Service\RcmUserService $rcmUserManager
@@ -72,7 +56,7 @@ class ResetPasswordPluginControllerFactory implements FactoryInterface
         return new ResetPasswordPluginController(
             $entityManager,
             $config,
-            $templateMailer,
+            $mailer,
             $rcmUserManager
         );
     }

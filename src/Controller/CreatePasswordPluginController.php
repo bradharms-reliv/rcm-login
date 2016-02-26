@@ -1,36 +1,16 @@
 <?php
 
-/**
- * Create Password Controller
- *
- * Main controller for the online app
- *
- * PHP version 5.3
- *
- * LICENSE: No License yet
- *
- * @category  Reliv
- * @author    Brian Janish <bjanish@relivinc.com>
- * @copyright 2013 Reliv International
- * @license   License.txt New BSD License
- * @version   GIT: <git_id>
- */
 namespace RcmLogin\Controller;
 
-use App\Controller\TemplateMailer;
 use Doctrine\ORM\EntityManager;
-use Rcm\Http\Response;
 use Rcm\Plugin\BaseController;
 use Rcm\Plugin\PluginInterface;
 use RcmLogin\Form\CreateNewPasswordForm;
 use RcmLogin\InputFilter\CreateNewPasswordInputFilter;
 use RcmUser\Service\RcmUserService;
-use Vista\Exception\DistributorNotFoundException;
 
 /**
- * Online App Plugin Controller
- *
- * Main controller for the online app
+ * CreatePasswordPluginController
  *
  * @category  Reliv
  * @author    Brian Janish <bjanish@relivinc.com>
@@ -41,30 +21,28 @@ use Vista\Exception\DistributorNotFoundException;
  */
 class CreatePasswordPluginController extends BaseController implements PluginInterface
 {
-
-    protected $templateMailer;
     /**
      * @var \RcmUser\Service\RcmUserService
      */
     protected $rcmUserService;
 
+    /**
+     * @var
+     */
     protected $entityManager;
 
     /**
      * @param EntityManager  $entityManager
      * @param null           $config
-     * @param TemplateMailer $templateMailer
      * @param RcmUserService $rcmUserService
      */
     public function __construct(
         EntityManager $entityManager,
         $config,
-        TemplateMailer $templateMailer,
         RcmUserService $rcmUserService
     ) {
         $this->entityMgr = $entityManager;
         parent::__construct($config, 'RcmCreateNewPassword');
-        $this->templateMailer = $templateMailer;
         $this->rcmUserService = $rcmUserService;
     }
 
@@ -136,9 +114,20 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
                 'error' => $error
             ]
         );
+
         return $view;
     }
 
+    /**
+     * handlePost
+     *
+     * @param CreateNewPasswordForm $form
+     * @param array                 $instanceConfig
+     * @param string                $userId
+     *
+     * @return null
+     * @throws \Exception
+     */
     protected function handlePost(
         CreateNewPasswordForm $form,
         $instanceConfig,
@@ -159,11 +148,7 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
             $user = $this->rcmUserService->buildNewUser();
             $user->setUsername($userId);
 
-            try {
-                $result = $this->rcmUserService->readUser($user);
-            } catch (DistributorNotFoundException $e) {
-                return $instanceConfig['translate']['systemError'];
-            }
+            $result = $this->rcmUserService->readUser($user);
 
             if (!$result->isSuccess()) {
                 return $instanceConfig['translate']['invalidLink'];
@@ -182,9 +167,13 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
         return null;
     }
 
+    /**
+     * notAuthorized
+     *
+     * @return \Zend\Http\Response
+     */
     protected function notAuthorized()
     {
-
         return $this->redirect()->toUrl('/forgot-password?invalidLink=1');
     }
 }

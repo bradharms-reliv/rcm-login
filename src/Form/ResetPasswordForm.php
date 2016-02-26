@@ -1,10 +1,28 @@
 <?php
+
 namespace RcmLogin\Form;
 
 use Zend\Form\Form;
 
+/**
+ * Class ResetPasswordForm
+ *
+ * PHP version 5
+ *
+ * @category  Reliv
+ * @package   RcmLogin\Form
+ * @copyright 2015 Reliv International
+ * @license   License.txt
+ * @version   Release: <package_version>
+ * @link      https://github.com/reliv
+ */
 class ResetPasswordForm extends Form
 {
+    /**
+     * ResetPasswordForm constructor.
+     *
+     * @param int|null|string $instanceConfig
+     */
     public function __construct($instanceConfig)
     {
         parent::__construct();

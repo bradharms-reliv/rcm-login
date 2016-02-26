@@ -42,6 +42,7 @@ return [
             'defaultInstanceConfig' => include
                 __DIR__ . '/resetPasswordDefaultInstanceConfig.php',
             'canCache' => false,
+            'mailer' => 'RcmLogin\Email\DefaultMailer',
         ],
         'RcmCreateNewPassword' => [
             'type' => 'Common',
@@ -102,7 +103,8 @@ return [
         'factories' => [
             'RcmLogin\EventListener\Login' => 'RcmLogin\Factory\LoginEventListenerFactory',
             'RcmLogin\Validator\RedirectValidator' => 'RcmLogin\Factory\RedirectValidatorFactory',
-            'RcmLogin\Filter\RedirectFilter' => 'RcmLogin\Factory\RedirectFilterFactory'
+            'RcmLogin\Filter\RedirectFilter' => 'RcmLogin\Factory\RedirectFilterFactory',
+            'RcmLogin\Email\DefaultMailer' => 'RcmLogin\Factory\DefaultMailerFactory',
         ],
     ],
 ];

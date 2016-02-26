@@ -1,36 +1,17 @@
 <?php
 
-/**
- * Reset Password Plugin Controller
- *
- * Main controller for the online app
- *
- * PHP version 5.3
- *
- * LICENSE: No License yet
- *
- * @category  Reliv
- * @author    Brian Janish <bjanish@relivinc.com>
- * @copyright 2013 Reliv International
- * @license   License.txt New BSD License
- * @version   GIT: <git_id>
- */
 namespace RcmLogin\Controller;
 
-use App\Controller\TemplateMailer;
 use Doctrine\ORM\EntityManager;
 use Rcm\Plugin\BaseController;
 use Rcm\Plugin\PluginInterface;
+use RcmLogin\Email\Mailer;
 use RcmLogin\Entity\ResetPassword;
 use RcmLogin\Form\ResetPasswordForm;
 use RcmUser\Service\RcmUserService;
-use Vista\Exception\DistributorNotFoundException;
-use Zend\Mail\Exception\InvalidArgumentException;
 
 /**
  * Reset Password Plugin Controller
- *
- * Main controller for the online app
  *
  * @category  Reliv
  * @author    Brian Janish <bjanish@relivinc.com>
@@ -44,9 +25,10 @@ class ResetPasswordPluginController extends BaseController implements
 {
 
     /**
-     * @var TemplateMailer
+     * @var Mailer
      */
-    protected $templateMailer;
+    protected $mailer;
+
     /**
      * @var \RcmUser\Service\RcmUserService
      */
@@ -63,29 +45,29 @@ class ResetPasswordPluginController extends BaseController implements
     protected $entityManager;
 
     /**
-     * __construct
+     * ResetPasswordPluginController constructor.
      *
-     * @param EntityManager $entityManager entityManager
-     * @param null $config config
-     * @param TemplateMailer $templateMailer templateMailer
-     * @param RcmUserService $rcmUserManager rcmUserManager
+     * @param EntityManager  $entityManager
+     * @param null           $config
+     * @param Mailer         $mailer
+     * @param RcmUserService $rcmUserManager
      */
     public function __construct(
         EntityManager $entityManager,
         $config,
-        TemplateMailer $templateMailer,
+        Mailer $mailer,
         RcmUserService $rcmUserManager
     ) {
         $this->entityMgr = $entityManager;
         parent::__construct($config, 'RcmResetPassword');
-        $this->templateMailer = $templateMailer;
+        $this->mailer = $mailer;
         $this->rcmUserManager = $rcmUserManager;
     }
 
     /**
      * Plugin Action - Returns the guest-facing view model for this plugin
      *
-     * @param int $instanceId plugin instance id
+     * @param int   $instanceId     plugin instance id
      * @param array $instanceConfig Instance Config
      *
      * @return \Zend\View\Model\ViewModel
@@ -126,7 +108,6 @@ class ResetPasswordPluginController extends BaseController implements
 
         $view->setVariable('error', $error);
 
-
         return $view;
     }
 
@@ -156,11 +137,7 @@ class ResetPasswordPluginController extends BaseController implements
         $user = $this->rcmUserManager->buildNewUser();
         $user->setUsername($userId);
 
-        try {
-            $result = $this->rcmUserManager->readUser($user);
-        } catch (DistributorNotFoundException $e) {
-            return;
-        }
+        $result = $this->rcmUserManager->readUser($user);
 
         if (!$result->isSuccess()) {
             return;
@@ -173,47 +150,14 @@ class ResetPasswordPluginController extends BaseController implements
 
         $resetPw->setUserId($user->getId());
 
-
         $this->entityMgr->persist($resetPw);
         $this->entityMgr->flush();
-        $this->sendEmail(
+        $this->mailer->sendRestPasswordEmail(
             $resetPw,
-            $userId,
-            $user->getEmail(),
+            $user,
             $instanceConfig
         );
 
         return;
-    }
-
-    /**
-     * @param $resetPw
-     * @param $userId
-     * @param $userEmail
-     * @param $instanceConfig
-     */
-    protected function sendEmail(
-        ResetPassword $resetPw,
-        $userId,
-        $userEmail,
-        $instanceConfig
-    ) {
-        try {
-            $this->templateMailer->sendEmailTemplateFromConfigArray(
-                $userEmail,
-                $instanceConfig['prospectEmail'],
-                [
-                    'name' => '',
-                    'userId' => $userId,
-                    'url' =>
-                        'https://' . $_SERVER['HTTP_HOST']
-                        . '/reset-password?id='
-                        . $resetPw->getResetId() . '&key='
-                        . $resetPw->getHashKey()
-                ]
-            );
-        } catch (InvalidArgumentException $e) {
-            // Do nothing
-        }
     }
 }

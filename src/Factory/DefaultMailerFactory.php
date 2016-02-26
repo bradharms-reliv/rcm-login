@@ -2,31 +2,37 @@
 
 namespace RcmLogin\Factory;
 
-use RcmLogin\EventListener\Login;
+use RcmLogin\Email\DefaultMailer;
+use RcmLogin\Validator\RedirectValidator;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Class LoginEventListenerFactory
+ * Class DefaultMailerFactory
  *
  * PHP version 5
  *
  * @category  Reliv
  * @package   RcmLogin\Factory
+ * @author    James Jervis <jjervis@relivinc.com>
  * @copyright 2015 Reliv International
  * @license   License.txt
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-class LoginEventListenerFactory implements FactoryInterface
+class DefaultMailerFactory implements FactoryInterface
 {
-
+    /**
+     * createService
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return RedirectValidator
+     */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $eventListener = new Login(
-            $serviceLocator->get('RcmLogin\Filter\RedirectFilter')
-        );
+        $mailer = new DefaultMailer();
 
-        return $eventListener;
+        return $mailer;
     }
 }
