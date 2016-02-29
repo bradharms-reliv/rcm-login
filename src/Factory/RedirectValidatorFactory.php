@@ -1,12 +1,4 @@
 <?php
-/**
- * @category  RCM
- * @author    Westin Shafer <wshafer@relivinc.com>
- * @copyright 2012 Reliv International
- * @license   License.txt New BSD License
- * @version   GIT: reliv
- * @link      http://ci.reliv.com/confluence
- */
 
 namespace RcmLogin\Factory;
 
@@ -15,6 +7,18 @@ use RcmLogin\Validator\RedirectValidator;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class RedirectValidatorFactory
+ *
+ * PHP version 5
+ *
+ * @category  Reliv
+ * @package   RcmLogin\Factory
+ * @copyright 2015 Reliv International
+ * @license   License.txt
+ * @version   Release: <package_version>
+ * @link      https://github.com/reliv
+ */
 class RedirectValidatorFactory implements FactoryInterface
 {
 

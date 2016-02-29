@@ -1,6 +1,7 @@
 <?php
 
 namespace RcmLogin\Exception;
+
 /**
  * @category  RCM
  * @author    Westin Shafer <wshafer@relivinc.com>

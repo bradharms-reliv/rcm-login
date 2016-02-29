@@ -1,22 +1,5 @@
 <?php
-/**
- * Filter for login redirect
- *
- * This filter cleans up passed redirect urls and ensures that
- * successful logins are not redirected away from the site
- *
- * PHP version 5.4
- *
- * LICENSE: No License yet
- *
- * @category  Reliv
- * @package   RcmLogin
- * @author    Westin Shafer <wshafer@relivinc.com>
- * @copyright 2015 Reliv International
- * @license   License.txt New BSD License
- * @version   GIT: <git_id>
- * @link      http://github.com/reliv
- */
+
 namespace RcmLogin\Filter;
 
 use Zend\Filter\FilterInterface;
@@ -41,6 +24,11 @@ class RedirectFilter implements FilterInterface
     /** @var ValidatorInterface */
     protected $validator;
 
+    /**
+     * RedirectFilter constructor.
+     *
+     * @param ValidatorInterface $validator
+     */
     public function __construct(ValidatorInterface $validator)
     {
         $this->validator = $validator;

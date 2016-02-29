@@ -1,4 +1,5 @@
 <?php
+
 namespace RcmLogin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -43,7 +44,7 @@ class ResetPassword
     protected $resetId;
 
     /**
-     * @var \DateTime when the customer began the app
+     * @var \DateTime
      *
      * @ORM\Column(type="datetime")
      */

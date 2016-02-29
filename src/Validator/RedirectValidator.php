@@ -18,6 +18,13 @@ use Zend\Validator\Regex;
  */
 class RedirectValidator extends Regex
 {
+    /**
+     * isValid
+     *
+     * @param string $value
+     *
+     * @return bool
+     */
     public function isValid($value)
     {
         if (!is_string($value) && !is_int($value) && !is_float($value)) {

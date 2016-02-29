@@ -8,7 +8,6 @@
  *
  * @category  Reliv
  * @package   RcmLogin\Test
- * @author    James Jervis <jjervis@relivinc.com>
  * @copyright 2014 Reliv International
  * @license   License.txt New BSD License
  * @version   GIT: <git_id>

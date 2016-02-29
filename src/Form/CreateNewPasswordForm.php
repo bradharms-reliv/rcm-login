@@ -1,14 +1,26 @@
 <?php
+
 namespace RcmLogin\Form;
 
 use Zend\Form\Form;
 
 /**
  * Class CreateNewPasswordForm
+ *
+ * PHP version 5
+ *
+ * @category  Reliv
+ * @package   RcmLogin\Form
+ * @copyright 2015 Reliv International
+ * @license   License.txt
+ * @version   Release: <package_version>
+ * @link      https://github.com/reliv
  */
 class CreateNewPasswordForm extends Form
 {
     /**
+     * CreateNewPasswordForm constructor.
+     *
      * @param int|null|string $instanceConfig
      */
     public function __construct($instanceConfig)
