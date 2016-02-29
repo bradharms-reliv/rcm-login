@@ -28,7 +28,7 @@ return [
             'requireHttps' => true,
             'postLoginRedirectUrl' => '/login-home',
             'defaultInstanceConfig' => include __DIR__ .
-                    '/defaultInstanceConfig.php',
+                '/defaultInstanceConfig.php',
             'canCache' => false,
             'uncategorizedErrorRedirect' => "/account-issue",
             'defaultSuccessRedirect' => '/',
@@ -98,13 +98,15 @@ return [
             'RcmCreateNewPassword' => 'RcmLogin\Factory\CreatePasswordPluginControllerFactory',
         ],
     ],
-
     'service_manager' => [
         'factories' => [
             'RcmLogin\EventListener\Login' => 'RcmLogin\Factory\LoginEventListenerFactory',
             'RcmLogin\Validator\RedirectValidator' => 'RcmLogin\Factory\RedirectValidatorFactory',
             'RcmLogin\Filter\RedirectFilter' => 'RcmLogin\Factory\RedirectFilterFactory',
             'RcmLogin\Email\DefaultMailer' => 'RcmLogin\Factory\DefaultMailerFactory',
+        ],
+        'invokables' => [
+            'RcmLogin\Form\LabelHelper' => 'RcmLogin\Form\LabelHelper',
         ],
     ],
 ];

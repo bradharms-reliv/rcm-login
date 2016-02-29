@@ -65,7 +65,7 @@ echo $this->formInput($form->get('rcmPluginName'));
         </tr>
         <tr>
             <td>
-                <?= $this->rcmLabel($form->get('userId')); ?>
+                <?= $this->labelHelper->getHtml($form->get('userId'), $this->instanceConfig); ?>
                 <?= $this->formInput($form->get('userId')); ?>
             </td>
         </tr>

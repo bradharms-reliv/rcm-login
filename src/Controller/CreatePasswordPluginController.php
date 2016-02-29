@@ -47,6 +47,16 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
     }
 
     /**
+     * getLabelViewHelper
+     *
+     * @return \RcmLogin\Form\LabelHelper
+     */
+    protected function getLabelViewHelper()
+    {
+        return $this->getServiceLocator()->get('RcmLogin\Form\LabelHelper');
+    }
+
+    /**
      * Plugin Action - Returns the guest-facing view model for this plugin
      *
      * @param int   $instanceId     plugin instance id
@@ -111,7 +121,8 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
                 'hideForm' => $hideForm,
                 'form' => $form,
                 'postSuccess' => $postSuccess,
-                'error' => $error
+                'error' => $error,
+                'labelHelper' => $this->getLabelViewHelper(),
             ]
         );
 
