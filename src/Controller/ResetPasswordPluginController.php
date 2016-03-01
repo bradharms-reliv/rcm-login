@@ -65,6 +65,16 @@ class ResetPasswordPluginController extends BaseController implements
     }
 
     /**
+     * getLabelViewHelper
+     *
+     * @return \RcmLogin\Form\LabelHelper
+     */
+    protected function getLabelViewHelper()
+    {
+        return $this->getServiceLocator()->get('RcmLogin\Form\LabelHelper');
+    }
+
+    /**
      * Plugin Action - Returns the guest-facing view model for this plugin
      *
      * @param int   $instanceId     plugin instance id
@@ -91,7 +101,8 @@ class ResetPasswordPluginController extends BaseController implements
             [
                 'form' => $form,
                 'postSuccess' => false,
-                'error' => $error
+                'error' => $error,
+                'labelHelper' => $this->getLabelViewHelper(),
             ]
         );
 
