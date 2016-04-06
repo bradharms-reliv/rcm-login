@@ -25,13 +25,13 @@ interface Mailer
      *
      * @param ResetPassword $resetPw
      * @param User          $user
-     * @param array         $instanceConfig
+     * @param array         $mailConfig
      *
      * @return mixed
      */
     public function sendRestPasswordEmail(
         ResetPassword $resetPw,
         User $user,
-        $instanceConfig
+        $mailConfig
     );
 }

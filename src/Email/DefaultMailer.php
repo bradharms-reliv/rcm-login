@@ -29,20 +29,20 @@ class DefaultMailer implements Mailer
      *
      * @param ResetPassword $resetPassword
      * @param User          $user
-     * @param array         $instanceConfig
+     * @param array         $mailConfig
      *
      * @return mixed
      */
     public function sendRestPasswordEmail(
         ResetPassword $resetPassword,
         User $user,
-        $instanceConfig
+        $mailConfig
     ) {
         $toEmail = $user->getEmail();
-        $fromEmail = $instanceConfig['fromEmail'];
-        $fromName = $instanceConfig['fromName'];
-        $subject = $instanceConfig['subject'];
-        $bodyTemplate = $instanceConfig['body'];
+        $fromEmail = $mailConfig['fromEmail'];
+        $fromName = $mailConfig['fromName'];
+        $subject = $mailConfig['subject'];
+        $bodyTemplate = $mailConfig['body'];
 
         //Ignore blank emails
         if (!trim($toEmail)) {
@@ -74,7 +74,6 @@ class DefaultMailer implements Mailer
             );
         }
         try {
-
             $html = new MimePart($bodyTemplate);
             $html->type = "text/html";
 
