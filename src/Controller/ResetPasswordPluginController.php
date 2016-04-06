@@ -166,7 +166,7 @@ class ResetPasswordPluginController extends BaseController implements
         $this->mailer->sendRestPasswordEmail(
             $resetPw,
             $user,
-            $instanceConfig
+            $instanceConfig['prospectEmail']
         );
 
         return;
