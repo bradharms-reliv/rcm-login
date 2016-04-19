@@ -35,12 +35,13 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
      * @param EntityManager $entityManager
      * @param null $config
      * @param RcmUserService $rcmUserService
+     * @param string $pluginName
      */
     public function __construct(
         EntityManager $entityManager,
         $config,
         RcmUserService $rcmUserService,
-        $pluginName
+        $pluginName = 'RcmCreateNewPassword'
     ) {
         $this->entityMgr = $entityManager;
         parent::__construct($config, $pluginName);
