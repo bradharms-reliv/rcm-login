@@ -44,6 +44,12 @@ return [
             'canCache' => false,
             'mailer' => 'RcmLogin\Email\DefaultMailer',
         ],
+        /**
+         * @deprecated - The RcmResetPassword plugin now handles both the first and second
+         * page of the password reset process. The 2nd page will be rendered if
+         * fromPasswordResetEmail=1 is in the url. This one done to reduce the number of pages
+         * needed for this process to reduce brittleness.
+         */
         'RcmCreateNewPassword' => [
             'type' => 'Common',
             'display' => 'Create New Password',
@@ -54,7 +60,6 @@ return [
             'canCache' => false,
         ],
     ],
-
     'doctrine' => [
         'driver' => [
             'RcmLogin' => [
@@ -71,7 +76,6 @@ return [
             ]
         ]
     ],
-
     'view_manager' => [
         'template_path_stack' => [
             __DIR__ . '/../view',
