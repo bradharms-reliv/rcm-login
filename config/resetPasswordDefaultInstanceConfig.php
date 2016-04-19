@@ -12,6 +12,8 @@ return [
         Enter your user name.  An email to reset your password will be sent to your email address on file.
         </div>
     ',
+    'passwordLabel' => 'New Password:',
+    'passwordTwoLabel' => 'Re-enter new password:',
     'userIdLabel' => 'User Name:',
     'button' => 'Submit',
     'prospectEmail' => [

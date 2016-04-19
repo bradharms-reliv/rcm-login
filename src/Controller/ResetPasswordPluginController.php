@@ -20,7 +20,7 @@ use RcmUser\Service\RcmUserService;
  * @version   Release: 1.0
  *
  */
-class ResetPasswordPluginController extends BaseController implements
+class ResetPasswordPluginController extends CreatePasswordPluginController implements
     PluginInterface
 {
 
@@ -47,9 +47,9 @@ class ResetPasswordPluginController extends BaseController implements
     /**
      * ResetPasswordPluginController constructor.
      *
-     * @param EntityManager  $entityManager
-     * @param null           $config
-     * @param Mailer         $mailer
+     * @param EntityManager $entityManager
+     * @param null $config
+     * @param Mailer $mailer
      * @param RcmUserService $rcmUserManager
      */
     public function __construct(
@@ -59,7 +59,7 @@ class ResetPasswordPluginController extends BaseController implements
         RcmUserService $rcmUserManager
     ) {
         $this->entityMgr = $entityManager;
-        parent::__construct($config, 'RcmResetPassword');
+        parent::__construct($entityManager, $config, $rcmUserManager, 'RcmResetPassword');
         $this->mailer = $mailer;
         $this->rcmUserManager = $rcmUserManager;
     }
@@ -77,18 +77,24 @@ class ResetPasswordPluginController extends BaseController implements
     /**
      * Plugin Action - Returns the guest-facing view model for this plugin
      *
-     * @param int   $instanceId     plugin instance id
+     * @param int $instanceId plugin instance id
      * @param array $instanceConfig Instance Config
      *
      * @return \Zend\View\Model\ViewModel
      */
     public function renderInstance($instanceId, $instanceConfig)
     {
+        //Allows this plugin to also serve as the CreateNewPassword form for simpler page management.
+        if ($this->params()->fromQuery('fromPasswordResetEmail') == 1) {
+            return parent::renderInstance($instanceId, $instanceConfig);
+        }
+
         $form = new ResetPasswordForm($instanceConfig);
         $error = null;
         $view = parent::renderInstance(
             $instanceId,
-            $instanceConfig
+            $instanceConfig,
+            true
         );
 
         if ($this->params()->fromQuery('invalidLink')) {

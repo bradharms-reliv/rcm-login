@@ -32,17 +32,18 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
     protected $entityManager;
 
     /**
-     * @param EntityManager  $entityManager
-     * @param null           $config
+     * @param EntityManager $entityManager
+     * @param null $config
      * @param RcmUserService $rcmUserService
      */
     public function __construct(
         EntityManager $entityManager,
         $config,
-        RcmUserService $rcmUserService
+        RcmUserService $rcmUserService,
+        $pluginName
     ) {
         $this->entityMgr = $entityManager;
-        parent::__construct($config, 'RcmCreateNewPassword');
+        parent::__construct($config, $pluginName);
         $this->rcmUserService = $rcmUserService;
     }
 
@@ -59,13 +60,17 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
     /**
      * Plugin Action - Returns the guest-facing view model for this plugin
      *
-     * @param int   $instanceId     plugin instance id
+     * @param int $instanceId plugin instance id
      * @param array $instanceConfig Instance Config
      *
      * @return \Zend\View\Model\ViewModel
      */
-    public function renderInstance($instanceId, $instanceConfig)
+    public function renderInstance($instanceId, $instanceConfig, $skipAndJustCallParent = false)
     {
+        if ($skipAndJustCallParent) {
+            return parent::renderInstance($instanceId, $instanceConfig);
+        }
+
         $form = new CreateNewPasswordForm($instanceConfig);
 
         $postSuccess = false;
@@ -95,7 +100,7 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
         }
 
         if ($this->postIsForThisPlugin()) {
-            $error = $this->handlePost(
+            $error = $this->handlePostForCreatePassword(
                 $form,
                 $instanceConfig,
                 $passwordEntity->getUserId()
@@ -133,13 +138,13 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
      * handlePost
      *
      * @param CreateNewPasswordForm $form
-     * @param array                 $instanceConfig
-     * @param string                $userId
+     * @param array $instanceConfig
+     * @param string $userId
      *
      * @return null
      * @throws \Exception
      */
-    protected function handlePost(
+    protected function handlePostForCreatePassword(
         CreateNewPasswordForm $form,
         $instanceConfig,
         $userId
@@ -186,5 +191,16 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
     protected function notAuthorized()
     {
         return $this->redirect()->toUrl('/forgot-password?invalidLink=1');
+    }
+
+    public function postIsForThisPlugin()
+    {
+        if (!$this->getRequest()->isPost()) {
+            return false;
+        }
+
+        return
+            $this->getRequest()->getPost('rcmPluginName') == $this->pluginName
+            || $this->getRequest()->getPost('rcmPluginName') == 'RcmCreateNewPassword';
     }
 }

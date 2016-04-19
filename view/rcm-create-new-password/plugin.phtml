@@ -3,126 +3,110 @@
 $this->headLink()->appendStylesheet(
     $this->basePath() . '/modules/rcm-create-new-password/style.css'
 );
-$this->headScript()->appendFile(
-    $this->basePath()
-    . '/modules/rcm-login/rcm-create-new-password.js',
-    'text/javascript'
-);
+
 $form = $this->form;
 $form->prepare();
 ?>
-    <script type="text/javascript">
-        $(function () {
-            new RcmCreateNewPassword(
-                <?=  $this->instanceId?>,
-                <?=  json_encode($this->instanceConfig['translate'])?>
-            );
-        });
-    </script>
-
-    <div class="error"></div>
-
 <?php
 echo $this->form()->openTag($form);
 //Helps prevent this form's posts from effecting other plugins
 echo $this->formInput($form->get('rcmPluginName'));
 ?>
 
-    <table style="border:0;" width="310">
+<table style="border:0;" width="310">
 
-        <tr>
-            <td colspan="2">
-                <div data-richEdit="top">
-                    <?= $this->instanceConfig['top'] ?>
-                </div>
-            </td>
-        </tr>
+    <tr>
+        <td colspan="2">
+            <div data-richEdit="top">
+                <h1><?= $this->translate('Reset Password') ?></h1>
+            </div>
+        </td>
+    </tr>
 
+    <?php if ($this->postSuccess): ?>
 
-        <?php if ($this->postSuccess): ?>
+    <tr>
+        <td>
+            <?= $this->translate('Your password has been changed.') ?>
+        </td>
+        <td>
+            <p>&nbsp;</p>
+        </td>
+    </tr>
 
-            <tr>
-                <td>
-                    <?= $this->instanceConfig['thankYou'] ?>
-                </td>
-                <td>
-                    <p>&nbsp;</p>
-                </td>
-            </tr>
-
-        <?php else: ?>
-            <tr>
-                <td>
-                    <p>&nbsp;</p>
-                </td>
-                <td>
-                    <p>&nbsp;</p>
-                </td>
-            </tr>
-            <tr>
-                <td height="10px" colspan="2">
-                    <div class="error">
-                        <?= isset($error) ? $error : '' ?>
-                    </div>
-                </td>
-            </tr>
-            <?php if($this->hideForm != true):?>
-            <tr>
-                <td>
-                    <p>&nbsp;</p>
-                </td>
-                <td>
-                    <p>&nbsp;</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <?= $this->labelHelper->getHtml($form->get('password'), $this->instanceConfig); ?>
-                </td>
-                <td style="width:33%">
-                    <?= $this->formInput($form->get('password')); ?>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" style="text-align: right">
-                    <div data-richEdit="alphanumeric">
-                        <?= $this->instanceConfig['alphanumeric'] ?>
-                        <p>&nbsp;</p>
-                    </div>
-                </td>
-                <td>
-                    <p>&nbsp;</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <?= $this->labelHelper->getHtml($form->get('passwordTwo'), $this->instanceConfig); ?>
-                </td>
-                <td style="width:33%">
-                    <?= $this->formInput($form->get('passwordTwo')); ?>
-                </td>
-
-            </tr>
-            <tr>
-                <td>
-                    <p>&nbsp;</p>
-                </td>
-                <td>
-                    <p>&nbsp;</p>
-                </td>
-            </tr>
-            <td>
+    <?php else: ?>
+    <tr>
+        <td>
+            <p>&nbsp;</p>
+        </td>
+        <td>
+            <p>&nbsp;</p>
+        </td>
+    </tr>
+    <tr>
+        <td height="10px" colspan="2">
+            <div class="error">
+                <?= isset($error) ? $error : '' ?>
+            </div>
+        </td>
+    </tr>
+    <?php if ($this->hideForm != true): ?>
+    <tr>
+        <td>
+            <p>&nbsp;</p>
+        </td>
+        <td>
+            <p>&nbsp;</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?= $this->labelHelper->getHtml($form->get('password'), $this->instanceConfig); ?>
+        </td>
+        <td style="width:33%">
+            <?= $this->formInput($form->get('password')); ?>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align: right">
+            <div data-richEdit="alphanumeric">
+                <?= $this->translate('(letters and numbers only)') ?>
                 <p>&nbsp;</p>
-            </td>
-            <td style="text-align: right">
-                <button class="btn btn-primary" type="submit">
-                    <span data-textEdit="button"><?= $this->instanceConfig['button'] ?></span>
-                </button>
-            </td>
-            </tr>
-            <?php endif ?>
+            </div>
+        </td>
+        <td>
+            <p>&nbsp;</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?= $this->labelHelper->getHtml($form->get('passwordTwo'), $this->instanceConfig); ?>
+        </td>
+        <td style="width:33%">
+            <?= $this->formInput($form->get('passwordTwo')); ?>
+        </td>
+
+    </tr>
+    <tr>
+        <td>
+            <p>&nbsp;</p>
+        </td>
+        <td>
+            <p>&nbsp;</p>
+        </td>
+    </tr>
+    <td>
+        <p>&nbsp;</p>
+    </td>
+    <td style="text-align: right">
+        <button class="btn btn-primary" type="submit">
+            <span data-textEdit="button"><?= $this->translate('Submit') ?></span>
+        </button>
+    </td>
+
+    <?php endif ?>
         <?php endif ?>
 
-    </table>
+</table>
 
 <?= $this->form()->closeTag($form); ?>

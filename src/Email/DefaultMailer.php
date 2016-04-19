@@ -28,8 +28,8 @@ class DefaultMailer implements Mailer
      * send
      *
      * @param ResetPassword $resetPassword
-     * @param User          $user
-     * @param array         $mailConfig
+     * @param User $user
+     * @param array $mailConfig
      *
      * @return mixed
      */
@@ -54,7 +54,7 @@ class DefaultMailer implements Mailer
             'userId' => $user->getId(),
             'url' =>
                 'https://' . $_SERVER['HTTP_HOST']
-                . '/reset-password?id='
+                . '/reset-password?fromPasswordResetEmail=1&id='
                 . $resetPassword->getResetId() . '&key='
                 . $resetPassword->getHashKey()
         ];
