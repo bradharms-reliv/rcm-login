@@ -39,6 +39,8 @@
   ],
   "require": {
     "php": ">=5.4.0",
+    "fxp/composer-asset-plugin": "^1.2.0",
+    "bower-asset/jquery": "3.*",
     "rcm/core": "^1.7.0",
     "rcm/core-js": "^1.0.0",
     "rcm/user": "1.*"
@@ -50,6 +52,12 @@
   "autoload": {
     "psr-4": {
       "RcmLogin\\": "src/"
+    }
+  },
+  "extra": {
+    "asset-pattern-skip-version": "(-patch*)",
+    "asset-installer-paths": {
+      "bower-asset-library": "public/bower_components"
     }
   }
 }
