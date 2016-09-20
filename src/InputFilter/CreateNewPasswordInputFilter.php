@@ -25,7 +25,6 @@ class CreateNewPasswordInputFilter extends \Zend\InputFilter\InputFilter
      */
     public function __construct()
     {
-
         $factory = new InputFactory();
 
         $this->add(
@@ -59,6 +58,5 @@ class CreateNewPasswordInputFilter extends \Zend\InputFilter\InputFilter
                 ]
             )
         );
-
     }
 }
