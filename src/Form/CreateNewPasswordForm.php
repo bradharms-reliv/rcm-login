@@ -54,6 +54,5 @@ class CreateNewPasswordForm extends Form
                 'attributes' => ['type' => 'password']
             ]
         );
-
     }
 }

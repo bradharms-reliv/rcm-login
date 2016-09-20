@@ -48,6 +48,5 @@ class ResetPasswordForm extends Form
                 'attributes' => ['type' => 'text']
             ]
         );
-
     }
 }

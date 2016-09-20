@@ -59,6 +59,5 @@ class CreateNewPasswordInputFilter extends \Zend\InputFilter\InputFilter
                 ]
             )
         );
-
     }
 }
