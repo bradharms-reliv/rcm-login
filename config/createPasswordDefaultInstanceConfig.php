@@ -4,7 +4,7 @@ return [
         'buttonProcessing' => 'Processing...',
         'passwordsDoNotMatch' => 'Passwords do not match',
         'invalidLink' => 'Link has expired or is invalid',
-        'systemError' => 'System error. Please call Distributor Relations at 1.800.RELIV US.'
+        'systemError' => 'A system error occurred'
     ],
     'thankYou' => '
         <br><p><strong>Your password has been changed.</strong></p>

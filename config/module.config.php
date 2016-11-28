@@ -17,70 +17,12 @@
  * @version   GIT: <git_id>
  */
 
-return [
+$mergedResetPassword = array_merge(
+    require(__DIR__ . '/createPasswordDefaultInstanceConfig.php'),
+    require(__DIR__ . '/resetPasswordDefaultInstanceConfig.php')
+);
 
-    'rcmPlugin' => [
-        'RcmLogin' => [
-            'type' => 'Common',
-            'display' => 'Login Area',
-            'tooltip' => 'Adds login area to page',
-            'icon' => '',
-            'requireHttps' => true,
-            'postLoginRedirectUrl' => '/login-home',
-            'defaultInstanceConfig' => include __DIR__ .
-                '/defaultInstanceConfig.php',
-            'canCache' => false,
-            'uncategorizedErrorRedirect' => "/account-issue",
-            'defaultSuccessRedirect' => '/',
-            'redirectBlacklistPattern' => '/.+:\/\/|\/\//i',
-        ],
-        'RcmResetPassword' => [
-            'type' => 'Common',
-            'display' => 'Reset Password',
-            'tooltip' => 'Reset Password',
-            'icon' => '',
-            'defaultInstanceConfig' => include
-                __DIR__ . '/resetPasswordDefaultInstanceConfig.php',
-            'canCache' => false,
-            'mailer' => 'RcmLogin\Email\DefaultMailer',
-        ],
-        /**
-         * @deprecated - The RcmResetPassword plugin now handles both the first and second
-         * page of the password reset process. The 2nd page will be rendered if
-         * fromPasswordResetEmail=1 is in the url. This one done to reduce the number of pages
-         * needed for this process to reduce brittleness.
-         */
-        'RcmCreateNewPassword' => [
-            'type' => 'Common',
-            'display' => 'Create New Password',
-            'tooltip' => 'Create New Password',
-            'icon' => '',
-            'defaultInstanceConfig' => include
-                __DIR__ . '/createPasswordDefaultInstanceConfig.php',
-            'canCache' => false,
-        ],
-    ],
-    'doctrine' => [
-        'driver' => [
-            'RcmLogin' => [
-                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                'cache' => 'array',
-                'paths' => [
-                    __DIR__ . '/../src/Entity'
-                ]
-            ],
-            'orm_default' => [
-                'drivers' => [
-                    'RcmLogin' => 'RcmLogin'
-                ]
-            ]
-        ]
-    ],
-    'view_manager' => [
-        'template_path_stack' => [
-            __DIR__ . '/../view',
-        ],
-    ],
+return [
     'asset_manager' => [
         'resolver_configs' => [
             'aliases' => [
@@ -102,6 +44,61 @@ return [
             'RcmCreateNewPassword' => 'RcmLogin\Factory\CreatePasswordPluginControllerFactory',
         ],
     ],
+    'doctrine' => [
+        'driver' => [
+            'RcmLogin' => [
+                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => [
+                    __DIR__ . '/../src/Entity'
+                ]
+            ],
+            'orm_default' => [
+                'drivers' => [
+                    'RcmLogin' => 'RcmLogin'
+                ]
+            ]
+        ]
+    ],
+    'rcmPlugin' => [
+        'RcmLogin' => [
+            'type' => 'Common',
+            'display' => 'Login Area',
+            'tooltip' => 'Adds login area to page',
+            'icon' => '',
+            'requireHttps' => true,
+            'postLoginRedirectUrl' => '/login-home',
+            'defaultInstanceConfig' => include __DIR__ .
+                '/defaultInstanceConfig.php',
+            'canCache' => false,
+            'uncategorizedErrorRedirect' => "/account-issue",
+            'defaultSuccessRedirect' => '/',
+            'redirectBlacklistPattern' => '/.+:\/\/|\/\//i',
+        ],
+        'RcmResetPassword' => [
+            'type' => 'Common',
+            'display' => 'Reset Password',
+            'tooltip' => 'Reset Password',
+            'icon' => '',
+            'defaultInstanceConfig' => $mergedResetPassword,
+            'canCache' => false,
+            'mailer' => 'RcmLogin\Email\DefaultMailer',
+        ],
+        /**
+         * @deprecated - The RcmResetPassword plugin now handles both the first and second
+         * page of the password reset process. The 2nd page will be rendered if
+         * fromPasswordResetEmail=1 is in the url. This one done to reduce the number of pages
+         * needed for this process to reduce brittleness.
+         */
+        'RcmCreateNewPassword' => [
+            'type' => 'Common',
+            'display' => 'Create New Password',
+            'tooltip' => 'Create New Password',
+            'icon' => '',
+            'defaultInstanceConfig' => $mergedResetPassword,
+            'canCache' => false,
+        ],
+    ],
     'service_manager' => [
         'factories' => [
             'RcmLogin\EventListener\Login' => 'RcmLogin\Factory\LoginEventListenerFactory',
@@ -111,6 +108,11 @@ return [
         ],
         'invokables' => [
             'RcmLogin\Form\LabelHelper' => 'RcmLogin\Form\LabelHelper',
+        ],
+    ],
+    'view_manager' => [
+        'template_path_stack' => [
+            __DIR__ . '/../view',
         ],
     ],
 ];
