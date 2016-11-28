@@ -194,6 +194,11 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
         return $this->redirect()->toUrl('/forgot-password?invalidLink=1');
     }
 
+    /**
+     * postIsForThisPlugin
+     *
+     * @return bool
+     */
     public function postIsForThisPlugin()
     {
         if (!$this->getRequest()->isPost()) {

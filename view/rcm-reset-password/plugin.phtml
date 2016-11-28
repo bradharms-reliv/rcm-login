@@ -3,21 +3,9 @@
 $this->headLink()->appendStylesheet(
     $this->basePath() . '/modules/rcm-login/style.css'
 );
-$this->headScript()->appendFile(
-    $this->basePath() . '/modules/rcm-login/rcm-reset-password.js',
-    'text/javascript'
-);
 $form = $this->form;
 $form->prepare();
 ?>
-<script type="text/javascript">
-    $(function () {
-        new RcmResetPassword(
-            <?=  $this->instanceId?>,
-            <?=  json_encode($this->instanceConfig['translate'])?>
-        );
-    });
-</script>
 
 <div class="error"></div>
 

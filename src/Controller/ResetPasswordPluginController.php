@@ -3,7 +3,6 @@
 namespace RcmLogin\Controller;
 
 use Doctrine\ORM\EntityManager;
-use Rcm\Plugin\BaseController;
 use Rcm\Plugin\PluginInterface;
 use RcmLogin\Email\Mailer;
 use RcmLogin\Entity\ResetPassword;
