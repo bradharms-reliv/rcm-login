@@ -6,8 +6,8 @@ use Doctrine\ORM\EntityManager;
 use Rcm\Plugin\BaseController;
 use Rcm\Plugin\PluginInterface;
 use RcmLogin\Form\CreateNewPasswordForm;
-use RcmLogin\InputFilter\CreateNewPasswordInputFilter;
 use RcmUser\Service\RcmUserService;
+use Zend\InputFilter\InputFilterInterface;
 
 /**
  * CreatePasswordPluginController
@@ -32,20 +32,37 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
     protected $entityManager;
 
     /**
+     * @var InputFilterInterface
+     */
+    protected $createPasswordInputFilter;
+
+    /**
+     * CreatePasswordPluginController constructor.
      * @param EntityManager $entityManager
      * @param null $config
      * @param RcmUserService $rcmUserService
-     * @param string $pluginName
+     * @param InputFilterInterface $createPasswordInputFilter
+     * @param string $pluginName\
      */
     public function __construct(
         EntityManager $entityManager,
         $config,
         RcmUserService $rcmUserService,
+        InputFilterInterface $createPasswordInputFilter,
         $pluginName = 'RcmCreateNewPassword'
     ) {
         $this->entityMgr = $entityManager;
+        $this->createPasswordInputFilter = $createPasswordInputFilter;
         parent::__construct($config, $pluginName);
         $this->rcmUserService = $rcmUserService;
+    }
+
+    /**
+     * @return InputFilterInterface
+     */
+    protected function getCreatePasswordInputFilter()
+    {
+        return clone($this->createPasswordInputFilter);
     }
 
     /**
@@ -150,11 +167,13 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
         $instanceConfig,
         $userId
     ) {
-        $form->setInputFilter(new CreateNewPasswordInputFilter());
+        $form->setInputFilter($this->getCreatePasswordInputFilter());
         $form->setData($this->getRequest()->getPost());
 
         if ($form->isValid()) {
             $formData = $form->getData();
+
+
             $newPasswordOne = $formData['password'];
             $newPasswordTwo = $formData['passwordTwo'];
 

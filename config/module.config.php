@@ -105,6 +105,8 @@ return [
             'RcmLogin\Validator\RedirectValidator' => 'RcmLogin\Factory\RedirectValidatorFactory',
             'RcmLogin\Filter\RedirectFilter' => 'RcmLogin\Factory\RedirectFilterFactory',
             'RcmLogin\Email\DefaultMailer' => 'RcmLogin\Factory\DefaultMailerFactory',
+            \RcmLogin\InputFilter\CreateNewPasswordInputFilter::class
+            => \RcmLogin\Factory\CreateNewPasswordInputFilterFactory::class
         ],
         'invokables' => [
             'RcmLogin\Form\LabelHelper' => 'RcmLogin\Form\LabelHelper',

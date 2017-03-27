@@ -141,6 +141,7 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
     ) {
         $resetPw = new ResetPassword();
         $form->setInputFilter($resetPw->getInputFilter());
+
         $form->setData($this->getRequest()->getPost());
 
         if (!$form->isValid()) {

@@ -48,10 +48,14 @@ class CreatePasswordPluginControllerFactory implements FactoryInterface
             'RcmUser\Service\RcmUserService'
         );
 
+        /** @var \Zend\InputFilter\InputFilterInterface $inputFilterInterface */
+        $inputFilterInterface = $serviceLocator->get('Zend\InputFilter\InputFilterInterface');
+
         return new CreatePasswordPluginController(
             $entityManager,
             $config,
-            $rcmUserService
+            $rcmUserService,
+            $inputFilterInterface
         );
     }
 }
