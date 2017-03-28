@@ -3,6 +3,7 @@
 namespace RcmLogin\Factory;
 
 use RcmLogin\Controller\CreatePasswordPluginController;
+use RcmLogin\InputFilter\CreateNewPasswordInputFilter;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -48,8 +49,8 @@ class CreatePasswordPluginControllerFactory implements FactoryInterface
             'RcmUser\Service\RcmUserService'
         );
 
-        /** @var \Zend\InputFilter\InputFilterInterface $inputFilterInterface */
-        $inputFilterInterface = $serviceLocator->get('Zend\InputFilter\InputFilterInterface');
+        /** @var CreateNewPasswordInputFilter $inputFilterInterface */
+        $inputFilterInterface = $serviceLocator->get(CreateNewPasswordInputFilter::class);
 
         return new CreatePasswordPluginController(
             $entityManager,
