@@ -2,13 +2,17 @@
 
 namespace RcmLogin\Controller;
 
+use App\Model\CheckoutMsgs;
+use App\Validator\RelivAlnumValidator;
 use Doctrine\ORM\EntityManager;
 use Rcm\Plugin\PluginInterface;
 use RcmLogin\Email\Mailer;
 use RcmLogin\Entity\ResetPassword;
 use RcmLogin\Form\ResetPasswordForm;
 use RcmUser\Service\RcmUserService;
+use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
+use Zend\InputFilter\Factory as InputFactory;
 
 /**
  * Reset Password Plugin Controller
@@ -45,24 +49,38 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
     protected $entityManager;
 
     /**
+     * @var InputFilterInterface
+     */
+    protected $resetPasswordInputFilter;
+
+    /**
      * ResetPasswordPluginController constructor.
-     *
      * @param EntityManager $entityManager
      * @param null $config
      * @param Mailer $mailer
      * @param RcmUserService $rcmUserManager
+     * @param InputFilterInterface $resetPasswordInputFilter
      */
     public function __construct(
         EntityManager $entityManager,
         $config,
         Mailer $mailer,
         RcmUserService $rcmUserManager,
-        InputFilterInterface $createPasswordInputFilter
+        InputFilterInterface $resetPasswordInputFilter
     ) {
         $this->entityMgr = $entityManager;
-        parent::__construct($entityManager, $config, $rcmUserManager, $createPasswordInputFilter, 'RcmResetPassword');
+        $this->resetPasswordInputFilter = $resetPasswordInputFilter;
+        parent::__construct($entityManager, $config, $rcmUserManager, $resetPasswordInputFilter, 'RcmResetPassword');
         $this->mailer = $mailer;
         $this->rcmUserManager = $rcmUserManager;
+    }
+
+    /**
+     * @return InputFilterInterface
+     */
+    protected function getResetPasswordInputFilter()
+    {
+        return clone($this->resetPasswordInputFilter);
     }
 
     /**
@@ -141,13 +159,14 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
         ResetPasswordForm $form,
         $instanceConfig
     ) {
+
         $resetPw = new ResetPassword();
-        $form->setInputFilter($resetPw->getInputFilter());
+        $form->setInputFilter($this->getResetPasswordInputFilter());
 
         $form->setData($this->getRequest()->getPost());
 
         if (!$form->isValid()) {
-            return;
+            return CheckoutMsgs::ACCOUNT_NOT_FOUND;
         }
 
         $formData = $form->getData();
@@ -159,12 +178,12 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
         $result = $this->rcmUserManager->readUser($user);
 
         if (!$result->isSuccess()) {
-            return;
+            return CheckoutMsgs::ACCOUNT_NOT_FOUND;
         }
 
         $user = $result->getUser();
         if (!$user->getEmail()) {
-            return;
+            return CheckoutMsgs::ACCOUNT_NOT_FOUND;
         }
 
         $resetPw->setUserId($user->getId());

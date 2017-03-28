@@ -72,31 +72,6 @@ class ResetPassword
     }
 
     /**
-     * @return InputFilter
-     */
-    public function getInputFilter()
-    {
-        $inputFilter = new InputFilter();
-
-        $factory = new InputFactory();
-
-        $inputFilter->add(
-            $factory->createInput(
-                [
-                    'name' => 'userId',
-                    'required' => true,
-                    'filters' => [
-                        new \Zend\Filter\StripTags(),
-                        new \Zend\Filter\StringTrim(),
-                    ]
-                ]
-            )
-        );
-
-        return $inputFilter;
-    }
-
-    /**
      * @param \DateTime $createdDate
      */
     public function setCreatedDate($createdDate)

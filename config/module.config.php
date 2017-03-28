@@ -106,7 +106,9 @@ return [
             'RcmLogin\Filter\RedirectFilter' => 'RcmLogin\Factory\RedirectFilterFactory',
             'RcmLogin\Email\DefaultMailer' => 'RcmLogin\Factory\DefaultMailerFactory',
             \RcmLogin\InputFilter\CreateNewPasswordInputFilter::class
-            => \RcmLogin\Factory\CreateNewPasswordInputFilterFactory::class
+            => \RcmLogin\Factory\CreateNewPasswordInputFilterFactory::class,
+            \RcmLogin\InputFilter\ResetPasswordInputFilter::class
+            => \RcmLogin\Factory\ResetPasswordInputFilterFactory::class
         ],
         'invokables' => [
             'RcmLogin\Form\LabelHelper' => 'RcmLogin\Form\LabelHelper',

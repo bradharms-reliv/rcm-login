@@ -2,6 +2,7 @@
 
 namespace RcmLogin\Controller;
 
+use App\Model\CheckoutMsgs;
 use Doctrine\ORM\EntityManager;
 use Rcm\Plugin\BaseController;
 use Rcm\Plugin\PluginInterface;
@@ -198,9 +199,10 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
             if (!$result->isSuccess()) {
                 throw new \Exception($result->getMessagesString());
             }
-        }
+        } else {
 
-        return null;
+            return CheckoutMsgs::GENERIC;
+        }
     }
 
     /**
