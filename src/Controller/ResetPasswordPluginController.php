@@ -8,6 +8,7 @@ use RcmLogin\Email\Mailer;
 use RcmLogin\Entity\ResetPassword;
 use RcmLogin\Form\ResetPasswordForm;
 use RcmUser\Service\RcmUserService;
+use Zend\InputFilter\InputFilterInterface;
 
 /**
  * Reset Password Plugin Controller
@@ -55,10 +56,11 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
         EntityManager $entityManager,
         $config,
         Mailer $mailer,
-        RcmUserService $rcmUserManager
+        RcmUserService $rcmUserManager,
+        InputFilterInterface $createPasswordInputFilter
     ) {
         $this->entityMgr = $entityManager;
-        parent::__construct($entityManager, $config, $rcmUserManager, 'RcmResetPassword');
+        parent::__construct($entityManager, $config, $rcmUserManager, $createPasswordInputFilter, 'RcmResetPassword');
         $this->mailer = $mailer;
         $this->rcmUserManager = $rcmUserManager;
     }
@@ -141,6 +143,7 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
     ) {
         $resetPw = new ResetPassword();
         $form->setInputFilter($resetPw->getInputFilter());
+
         $form->setData($this->getRequest()->getPost());
 
         if (!$form->isValid()) {
