@@ -6,7 +6,6 @@ namespace RcmLogin\Factory;
 use Interop\Container\ContainerInterface;
 use RcmLogin\InputFilter\CreateNewPasswordInputFilter;
 
-
 /**
  * CreateNewPasswordInputFilterFactory
  *
@@ -22,7 +21,6 @@ use RcmLogin\InputFilter\CreateNewPasswordInputFilter;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-
 class CreateNewPasswordInputFilterFactory
 {
     /**
@@ -30,6 +28,6 @@ class CreateNewPasswordInputFilterFactory
      */
     public function __invoke($container)
     {
-       return new CreateNewPasswordInputFilter();
+        return new CreateNewPasswordInputFilter();
     }
 }

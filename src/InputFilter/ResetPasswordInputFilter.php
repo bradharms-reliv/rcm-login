@@ -5,7 +5,6 @@ namespace RcmLogin\InputFilter;
 
 use Zend\InputFilter\Factory as InputFactory;
 
-
 /**
  * ResetPasswordInputFilter
  *

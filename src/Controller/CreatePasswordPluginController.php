@@ -43,7 +43,7 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
      * @param null $config
      * @param RcmUserService $rcmUserService
      * @param InputFilterInterface $createPasswordInputFilter
-     * @param string $pluginName\
+     * @param string $pluginName \
      */
     public function __construct(
         EntityManager $entityManager,
@@ -200,7 +200,6 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
                 throw new \Exception($result->getMessagesString());
             }
         } else {
-
             return CheckoutMsgs::GENERIC;
         }
     }
