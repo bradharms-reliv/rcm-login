@@ -3,6 +3,7 @@
 namespace RcmLogin\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Psr\Log\LoggerInterface;
 use Rcm\Plugin\PluginInterface;
 use RcmLogin\Email\Mailer;
 use RcmLogin\Entity\ResetPassword;
@@ -45,24 +46,31 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
     protected $entityManager;
 
     /**
-     * ResetPasswordPluginController constructor.
-     *
-     * @param EntityManager $entityManager
-     * @param null $config
-     * @param Mailer $mailer
-     * @param RcmUserService $rcmUserManager
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @param EntityManager        $entityManager
+     * @param null                 $config
+     * @param Mailer               $mailer
+     * @param RcmUserService       $rcmUserManager
+     * @param InputFilterInterface $createPasswordInputFilter
+     * @param LoggerInterface      $logger
      */
     public function __construct(
         EntityManager $entityManager,
         $config,
         Mailer $mailer,
         RcmUserService $rcmUserManager,
-        InputFilterInterface $createPasswordInputFilter
+        InputFilterInterface $createPasswordInputFilter,
+        LoggerInterface $logger
     ) {
         $this->entityMgr = $entityManager;
         parent::__construct($entityManager, $config, $rcmUserManager, $createPasswordInputFilter, 'RcmResetPassword');
         $this->mailer = $mailer;
         $this->rcmUserManager = $rcmUserManager;
+        $this->logger = $logger;
     }
 
     /**
@@ -78,7 +86,7 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
     /**
      * Plugin Action - Returns the guest-facing view model for this plugin
      *
-     * @param int $instanceId plugin instance id
+     * @param int   $instanceId     plugin instance id
      * @param array $instanceConfig Instance Config
      *
      * @return \Zend\View\Model\ViewModel
@@ -147,6 +155,10 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
         $form->setData($this->getRequest()->getPost());
 
         if (!$form->isValid()) {
+            $this->logger->info(
+                self::class . ': Invalid ResetPasswordForm form with messages: ' . json_encode($form->getMessages())
+            );
+
             return;
         }
 
@@ -159,11 +171,19 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
         $result = $this->rcmUserManager->readUser($user);
 
         if (!$result->isSuccess()) {
+            $this->logger->info(
+                self::class . ': User not found with id: ' . $userId
+            );
+
             return;
         }
 
         $user = $result->getUser();
-        if (!$user->getEmail()) {
+        if (empty($user->getEmail())) {
+            $this->logger->info(
+                self::class . ": User ({$user->getId()}) has no email "
+            );
+
             return;
         }
 
