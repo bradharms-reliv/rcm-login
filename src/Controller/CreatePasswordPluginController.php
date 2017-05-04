@@ -2,6 +2,7 @@
 
 namespace RcmLogin\Controller;
 
+use App\Model\CheckoutMsgs;
 use Doctrine\ORM\EntityManager;
 use Rcm\Plugin\BaseController;
 use Rcm\Plugin\PluginInterface;
@@ -38,11 +39,12 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
 
     /**
      * CreatePasswordPluginController constructor.
-     * @param EntityManager $entityManager
-     * @param null $config
-     * @param RcmUserService $rcmUserService
+     *
+     * @param EntityManager        $entityManager
+     * @param null                 $config
+     * @param RcmUserService       $rcmUserService
      * @param InputFilterInterface $createPasswordInputFilter
-     * @param string $pluginName\
+     * @param string               $pluginName \
      */
     public function __construct(
         EntityManager $entityManager,
@@ -78,7 +80,7 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
     /**
      * Plugin Action - Returns the guest-facing view model for this plugin
      *
-     * @param int $instanceId plugin instance id
+     * @param int   $instanceId     plugin instance id
      * @param array $instanceConfig Instance Config
      *
      * @return \Zend\View\Model\ViewModel
@@ -156,8 +158,8 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
      * handlePost
      *
      * @param CreateNewPasswordForm $form
-     * @param array $instanceConfig
-     * @param string $userId
+     * @param array                 $instanceConfig
+     * @param string                $userId
      *
      * @return null
      * @throws \Exception
@@ -172,7 +174,6 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
 
         if ($form->isValid()) {
             $formData = $form->getData();
-
 
             $newPasswordOne = $formData['password'];
             $newPasswordTwo = $formData['passwordTwo'];
@@ -198,9 +199,9 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
             if (!$result->isSuccess()) {
                 throw new \Exception($result->getMessagesString());
             }
+        } else {
+            return CheckoutMsgs::GENERIC;
         }
-
-        return null;
     }
 
     /**

@@ -116,6 +116,9 @@ return [
             \RcmLogin\InputFilter\CreateNewPasswordInputFilter::class
             => \RcmLogin\Factory\CreateNewPasswordInputFilterFactory::class,
 
+            \RcmLogin\InputFilter\ResetPasswordInputFilter::class
+            => \RcmLogin\Factory\ResetPasswordInputFilterFactory::class,
+
             /* over-ride this for logging */
             \RcmLogin\Log\Logger::class
             => \RcmLogin\Log\LoggerNoneFactory::class,

@@ -46,6 +46,11 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
     protected $entityManager;
 
     /**
+     * @var InputFilterInterface
+     */
+    protected $resetPasswordInputFilter;
+
+    /**
      * @var LoggerInterface
      */
     protected $logger;
@@ -55,7 +60,7 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
      * @param null                 $config
      * @param Mailer               $mailer
      * @param RcmUserService       $rcmUserManager
-     * @param InputFilterInterface $createPasswordInputFilter
+     * @param InputFilterInterface $resetPasswordInputFilter
      * @param LoggerInterface      $logger
      */
     public function __construct(
@@ -63,14 +68,23 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
         $config,
         Mailer $mailer,
         RcmUserService $rcmUserManager,
-        InputFilterInterface $createPasswordInputFilter,
+        InputFilterInterface $resetPasswordInputFilter,
         LoggerInterface $logger
     ) {
         $this->entityMgr = $entityManager;
-        parent::__construct($entityManager, $config, $rcmUserManager, $createPasswordInputFilter, 'RcmResetPassword');
+        $this->resetPasswordInputFilter = $resetPasswordInputFilter;
+        parent::__construct($entityManager, $config, $rcmUserManager, $resetPasswordInputFilter, 'RcmResetPassword');
         $this->mailer = $mailer;
         $this->rcmUserManager = $rcmUserManager;
         $this->logger = $logger;
+    }
+
+    /**
+     * @return InputFilterInterface
+     */
+    protected function getResetPasswordInputFilter()
+    {
+        return clone($this->resetPasswordInputFilter);
     }
 
     /**
@@ -149,8 +163,9 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
         ResetPasswordForm $form,
         $instanceConfig
     ) {
+
         $resetPw = new ResetPassword();
-        $form->setInputFilter($resetPw->getInputFilter());
+        $form->setInputFilter($this->getResetPasswordInputFilter());
 
         $form->setData($this->getRequest()->getPost());
 
@@ -159,7 +174,7 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
                 self::class . ': Invalid ResetPasswordForm form with messages: ' . json_encode($form->getMessages())
             );
 
-            return;
+            return 'ACCOUNT_NOT_FOUND';
         }
 
         $formData = $form->getData();
@@ -175,7 +190,7 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
                 self::class . ': User not found with id: ' . $userId
             );
 
-            return;
+            return 'ACCOUNT_NOT_FOUND';
         }
 
         $user = $result->getUser();
@@ -184,7 +199,7 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
                 self::class . ": User ({$user->getId()}) has no email "
             );
 
-            return;
+            return 'ACCOUNT_NOT_FOUND';
         }
 
         $resetPw->setUserId($user->getId());
@@ -197,6 +212,6 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
             $instanceConfig['prospectEmail']
         );
 
-        return;
+        return '';
     }
 }
