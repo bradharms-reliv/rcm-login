@@ -4,6 +4,7 @@ namespace RcmLogin\Factory;
 
 use RcmLogin\Controller\ResetPasswordPluginController;
 use RcmLogin\InputFilter\ResetPasswordInputFilter;
+use RcmLogin\Log\Logger;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -57,13 +58,17 @@ class ResetPasswordPluginControllerFactory implements FactoryInterface
         /** @var ResetPasswordInputFilter $inputFilterInterface */
         $inputFilterInterface = $serviceLocator->get(ResetPasswordInputFilter::class);
 
+        $logger = $serviceLocator->get(
+            Logger::class
+        );
 
         return new ResetPasswordPluginController(
             $entityManager,
             $config,
             $mailer,
             $rcmUserManager,
-            $inputFilterInterface
+            $inputFilterInterface,
+            $logger
         );
     }
 }
