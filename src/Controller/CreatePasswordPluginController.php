@@ -105,7 +105,7 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
         if ($key) {
             /** @var \RcmLogin\Entity\ResetPassword $passwordEntity */
             $passwordEntity = $this->entityMgr
-                ->getRepository('RcmLogin\Entity\ResetPassword')
+                ->getRepository(\RcmLogin\Entity\ResetPassword::class)
                 ->findOneBy(['hashKey' => $key]);
         }
 
