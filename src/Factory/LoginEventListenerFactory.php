@@ -24,7 +24,8 @@ class LoginEventListenerFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $eventListener = new Login(
-            $serviceLocator->get('RcmLogin\Filter\RedirectFilter')
+            $serviceLocator->get('RcmLogin\Filter\RedirectFilter'),
+            ['redirect', 'redirect-from']
         );
 
         return $eventListener;

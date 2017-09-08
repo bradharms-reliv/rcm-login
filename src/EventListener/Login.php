@@ -4,34 +4,39 @@ namespace RcmLogin\EventListener;
 
 use Zend\EventManager\Event;
 use Zend\Filter\FilterInterface;
+use Zend\Http\Request;
 use Zend\Http\Response;
 
 /**
  * Rcm Login Default Event Listener
  *
- * RCM Login Default Event Listener
- *
- * @category  Reliv
- * @package   RcmLogin
  * @author    Westin Shafer <wshafer@relivinc.com>
  * @copyright 2012 Reliv International
  * @license   License.txt New BSD License
- * @version   Release: 1.0
  * @link      http://github.com/reliv
  */
 class Login
 {
-    /** @var FilterInterface  */
+    /**
+     * @var FilterInterface
+     */
     protected $filter;
 
     /**
-     * Login constructor.
-     *
-     * @param FilterInterface $filter
+     * @var array
      */
-    public function __construct(FilterInterface $filter)
-    {
+    protected $redirectParams;
+
+    /**
+     * @param FilterInterface $filter
+     * @param array           $redirectParams
+     */
+    public function __construct(
+        FilterInterface $filter,
+        array $redirectParams = ['redirect', 'redirect-from']
+    ) {
         $this->filter = $filter;
+        $this->redirectParams = $redirectParams;
     }
 
     /**
@@ -51,7 +56,7 @@ class Login
         /** @var $request \Zend\Http\Request */
         $request = $serviceManager->get('request');
 
-        $redirect = $request->getQuery('redirect', null);
+        $redirect = $this->getRedirectQueryParam($request);
         $redirect = $this->filter->filter($redirect);
 
         if (empty($redirect)
@@ -67,5 +72,24 @@ class Login
         $response->getHeaders()->addHeaderLine('Location', $redirect);
 
         return $response;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return mixed|null|\Zend\Stdlib\ParametersInterface
+     */
+    protected function getRedirectQueryParam(
+        Request $request
+    ) {
+        foreach ($this->redirectParams as $redirectParam) {
+            $redirect = $request->getQuery($redirectParam, null);
+
+            if (!empty($request)) {
+                return $redirect;
+            }
+        }
+
+        return null;
     }
 }
