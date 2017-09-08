@@ -57,6 +57,7 @@ class Login
         $request = $serviceManager->get('request');
 
         $redirect = $this->getRedirectQueryParam($request);
+
         $redirect = $this->filter->filter($redirect);
 
         if (empty($redirect)
@@ -85,7 +86,7 @@ class Login
         foreach ($this->redirectParams as $redirectParam) {
             $redirect = $request->getQuery($redirectParam, null);
 
-            if (!empty($request)) {
+            if (!empty($redirect)) {
                 return $redirect;
             }
         }
