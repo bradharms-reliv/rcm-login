@@ -42,7 +42,6 @@
   },
   "require": {
     "php": ">=5.4.0",
-    "fxp/composer-asset-plugin": "^1",
     "container-interop/container-interop": "1.*",
     "psr/log": "1.*",
     "rcm/core": "^1.7.0",
