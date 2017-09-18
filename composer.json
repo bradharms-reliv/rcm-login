@@ -37,10 +37,12 @@
       "homepage": "http://www.reliv.com/"
     }
   ],
+  "suggest": {
+    "bower-asset/jquery": "3.*",
+  },
   "require": {
     "php": ">=5.4.0",
     "fxp/composer-asset-plugin": "^1",
-    "bower-asset/jquery": "3.*",
     "container-interop/container-interop": "1.*",
     "psr/log": "1.*",
     "rcm/core": "^1.7.0",
