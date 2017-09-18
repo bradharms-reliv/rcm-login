@@ -39,7 +39,7 @@
   ],
   "suggest": {
     "bower-asset/jquery": "3.*"
-  }
+  },
   "require": {
     "php": ">=5.4.0",
     "container-interop/container-interop": "1.*",
