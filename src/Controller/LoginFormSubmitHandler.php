@@ -43,8 +43,7 @@ class LoginFormSubmitHandler implements MiddlewareInterface
         $afterLoginSuccessUrl = '/login-home',
         $disabledAccountUrl = '/account-issue',
         $redirectWhitelistRegex = '/^\/((?!\/)).*$/'
-    )
-    {
+    ) {
         $this->rcmUserService = $rcmUserService;
         $this->eventManager = $eventManager;
         $this->loginFormUrl = $loginFormUrl;
