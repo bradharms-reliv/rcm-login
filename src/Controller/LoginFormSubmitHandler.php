@@ -34,7 +34,7 @@ class LoginFormSubmitHandler implements MiddlewareInterface
      * @param string $loginFormUrl
      * @param string $afterLoginSuccessUrl
      * @param string $disabledAccountUrl
-     * @param string $redirectWhitelistRegex Allows only relative URLS to prevent malicous off-site redirects
+     * @param string $redirectWhitelistRegex By default this allows only relative URLS to prevent malicous redirects
      */
     public function __construct(
         RcmUserService $rcmUserService,
