@@ -1,8 +1,6 @@
 <?php
 
-
 namespace RcmLogin\Controller;
-
 
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
