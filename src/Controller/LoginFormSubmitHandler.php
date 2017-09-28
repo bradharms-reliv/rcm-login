@@ -8,6 +8,7 @@ use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use RcmLogin\Validator\RedirectValidator;
 use RcmUser\Service\RcmUserService;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\Response\RedirectResponse;
@@ -25,20 +26,27 @@ class LoginFormSubmitHandler implements MiddlewareInterface
 
     protected $afterLoginSuccessUrl;
 
-    protected $uncategorizedLoginErrorUrl;
+    protected $disabledAccountUrl;
+
+    protected $redirectValidator;
+
+    protected $redirectWhitelistRegex;
 
     public function __construct(
         RcmUserService $rcmUserService,
         EventManager $eventManager,
-        $loginFormUrl,
-        $afterLoginSuccessUrl,
-        $uncategorizedLoginErrorUrl = null
-    ) {
+        $loginFormUrl = '/login',
+        $afterLoginSuccessUrl = '/login-home',
+        $disabledAccountUrl = '/account-issue',
+        $redirectWhitelistRegex = '/^\/((?!\/)).*$/' //Allow only relative URLS to prevent malicous off-site redirects
+    )
+    {
         $this->rcmUserService = $rcmUserService;
         $this->eventManager = $eventManager;
         $this->loginFormUrl = $loginFormUrl;
         $this->afterLoginSuccessUrl = $afterLoginSuccessUrl;
-        $this->uncategorizedLoginErrorUrl = $uncategorizedLoginErrorUrl;
+        $this->disabledAccountUrl = $disabledAccountUrl;
+        $this->redirectWhitelistRegex = $redirectWhitelistRegex;
     }
 
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
@@ -53,7 +61,12 @@ class LoginFormSubmitHandler implements MiddlewareInterface
             return new HtmlResponse('400 Bad Request', 400);
         }
 
-        $redirectParam = filter_var($requestBody['redirect']);
+        $redirectParamUnvalidated = filter_var($requestBody['redirect']);
+
+        $redirectParam = null;
+        if (preg_match($this->redirectWhitelistRegex, $redirectParamUnvalidated)) {
+            $redirectParam = $redirectParamUnvalidated;
+        }
 
         //Ensure redirects can only be relative URLS to improve security. (Prevents redirects to bad sites)
         if (substr($redirectParam, 0, 1) !== '/') {
@@ -85,9 +98,9 @@ class LoginFormSubmitHandler implements MiddlewareInterface
              * disabled for some other reasion.
              */
             if ($authResult->getCode() == Result::FAILURE_UNCATEGORIZED
-                && !empty($this->uncategorizedLoginErrorUrl)
+                && !empty($this->disabledAccountUrl)
             ) {
-                return new RedirectResponse($this->uncategorizedLoginErrorUrl);
+                return new RedirectResponse($this->disabledAccountUrl);
             }
 
             return new RedirectResponse($this->loginFormUrl . '?errorCode=invalid'

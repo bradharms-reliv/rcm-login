@@ -67,11 +67,9 @@ return [
             'tooltip' => 'Adds login area to page',
             'icon' => '',
             'requireHttps' => true,
-            'postLoginRedirectUrl' => '/login-home',
             'defaultInstanceConfig' => include __DIR__ .
                 '/defaultInstanceConfig.php',
             'canCache' => false,
-            'defaultSuccessRedirect' => '/',
             'redirectBlacklistPattern' => '/.+:\/\/|\/\//i',
         ],
         'RcmResetPassword' => [

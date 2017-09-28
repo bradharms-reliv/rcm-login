@@ -58,19 +58,10 @@ class PluginController extends BaseController implements PluginInterface
             $errorCode = $this->getRequest()->getQuery('errorCode');
         }
 
-        $username = filter_var($this->getRequest()->getQuery('username'), FILTER_SANITIZE_STRIPPED);
-
-        $redirect = filter_var($this->getRequest()->getQuery('redirect'));
-
-        //Ensure redirects can only be relative URLS to improve security. (Prevents redirects to bad sites)
-        if (substr($redirect, 0, 1) !== '/') {
-            $redirect = null;
-        }
-
         return [
             'errorCode' => $errorCode,
-            'username' => $username,
-            'redirect' => $redirect
+            'username' => filter_var($this->getRequest()->getQuery('username'), FILTER_SANITIZE_STRIPPED),
+            'redirect' => filter_var($this->getRequest()->getQuery('redirect'))
         ];
     }
 }
