@@ -27,13 +27,22 @@ class LoginFormSubmitHandler implements MiddlewareInterface
 
     protected $redirectWhitelistRegex;
 
+    /**
+     * LoginFormSubmitHandler constructor.
+     * @param RcmUserService $rcmUserService
+     * @param EventManager $eventManager
+     * @param string $loginFormUrl
+     * @param string $afterLoginSuccessUrl
+     * @param string $disabledAccountUrl
+     * @param string $redirectWhitelistRegex Allows only relative URLS to prevent malicous off-site redirects
+     */
     public function __construct(
         RcmUserService $rcmUserService,
         EventManager $eventManager,
         $loginFormUrl = '/login',
         $afterLoginSuccessUrl = '/login-home',
         $disabledAccountUrl = '/account-issue',
-        $redirectWhitelistRegex = '/^\/((?!\/)).*$/' //Allow only relative URLS to prevent malicous off-site redirects
+        $redirectWhitelistRegex = '/^\/((?!\/)).*$/'
     )
     {
         $this->rcmUserService = $rcmUserService;
