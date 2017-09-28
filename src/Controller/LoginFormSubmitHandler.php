@@ -118,12 +118,11 @@ class LoginFormSubmitHandler implements MiddlewareInterface
             return $response;
         }
 
-        $redirectUrl = $this->afterLoginSuccessUrl;
-
         if ($redirectParam) {
-            $redirectUrl = $redirectParam;
+            //If we have been requested to redirect the user to somewhere besides the default place, do that
+            return new RedirectResponse($redirectParam);
         }
 
-        return new RedirectResponse($redirectUrl);
+        return new RedirectResponse($this->afterLoginSuccessUrl);
     }
 }
