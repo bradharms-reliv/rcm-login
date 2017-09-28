@@ -26,11 +26,10 @@ class PluginControllerTest extends \PHPUnit_Framework_TestCase
 {
     public function testRenderInstance()
     {
-        $controller = new PluginController($this->mockConfig, $this->mockRcmUserService);
+        $controller = new PluginController([]);
 
         $result = $controller->renderInstance(1, []);
 
-        // @todo this controller has some bits tat need to be refactored before unit testing
-        // $this->assertTrue(is_array($result), 'Array not returned');
+        $this->assertEquals($result->getTemplate(), 'rcm-login/plugin');
     }
 }
