@@ -71,7 +71,6 @@ return [
             'defaultInstanceConfig' => include __DIR__ .
                 '/defaultInstanceConfig.php',
             'canCache' => false,
-            'uncategorizedErrorRedirect' => "/account-issue",
             'defaultSuccessRedirect' => '/',
             'redirectBlacklistPattern' => '/.+:\/\/|\/\//i',
         ],

@@ -29,10 +29,10 @@ class PluginControllerFactory implements FactoryInterface
         /** @var ServiceLocatorInterface $serviceLocator */
         $serviceLocator = $cm->getServiceLocator();
 
-        $controller = new PluginController(
-            $serviceLocator->get('config'),
-            $serviceLocator->get('RcmUser\Service\RcmUserService')
+        return new PluginController(
+            $serviceLocator->get('config')
         );
+
         return $controller;
     }
 }
