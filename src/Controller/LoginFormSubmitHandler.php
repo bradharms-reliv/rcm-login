@@ -56,8 +56,7 @@ class LoginFormSubmitHandler implements MiddlewareInterface
     {
         $requestBody = $request->getParsedBody();
 
-        if (
-            !array_key_exists('redirect', $requestBody)
+        if (!array_key_exists('redirect', $requestBody)
             || !array_key_exists('username', $requestBody)
             || !array_key_exists('password', $requestBody)
         ) {
