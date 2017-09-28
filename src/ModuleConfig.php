@@ -19,7 +19,6 @@ class ModuleConfig
                         'arguments' => [
                             RcmUserService::class,
                             'EventManager',
-                            RedirectValidator::class,
                         ]
                     ]
                 ]
