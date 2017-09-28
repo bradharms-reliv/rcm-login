@@ -63,12 +63,7 @@ class LoginFormSubmitHandler implements MiddlewareInterface
             return new HtmlResponse('400 Bad Request', 400);
         }
 
-        $redirectParamUnvalidated = filter_var($requestBody['redirect']);
-
-        $redirectParam = null;
-        if (preg_match($this->redirectWhitelistRegex, $redirectParamUnvalidated)) {
-            $redirectParam = $redirectParamUnvalidated;
-        }
+        $redirectParam = filter_var($requestBody['redirect']);
 
         $username = trim(filter_var($requestBody['username'], FILTER_SANITIZE_STRING));
         $password = filter_var($requestBody['password'], FILTER_SANITIZE_STRING);
@@ -118,7 +113,7 @@ class LoginFormSubmitHandler implements MiddlewareInterface
             return $response;
         }
 
-        if ($redirectParam) {
+        if ($redirectParam && preg_match($this->redirectWhitelistRegex, $redirectParam)) {
             //If we have been requested to redirect the user to somewhere besides the default place, do that
             return new RedirectResponse($redirectParam);
         }
