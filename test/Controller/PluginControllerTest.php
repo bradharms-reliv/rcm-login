@@ -111,20 +111,18 @@ class PluginControllerTest extends \PHPUnit_Framework_TestCase
         return new Result($code, $identity, $messages);
     }
 
-    public function testRenderInstance()
-    {
-        $user = new User('123');
-        $result = $this->getMockResult();
-        $this->buildMocks($result, $user);
-
-        $controller
-            = new PluginController( $this->mockConfig, $this->mockRcmUserService);
-
-        $result = $controller->renderInstance(1,[]);
-
-        // @todo this controller has some bits tat need to be refactored before unit testing
-        // $this->assertTrue(is_array($result), 'Array not returned');
-    }
-
-
+//    public function testRenderInstance()
+//    {
+//        $user = new User('123');
+//        $result = $this->getMockResult();
+//        $this->buildMocks($result, $user);
+//
+//        $controller
+//            = new PluginController($this->mockConfig, $this->mockRcmUserService);
+//
+//        $result = $controller->renderInstance(1, []);
+//
+//        // @todo this controller has some bits tat need to be refactored before unit testing
+//        // $this->assertTrue(is_array($result), 'Array not returned');
+//    }
 }
