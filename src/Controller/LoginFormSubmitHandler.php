@@ -68,11 +68,6 @@ class LoginFormSubmitHandler implements MiddlewareInterface
             $redirectParam = $redirectParamUnvalidated;
         }
 
-        //Ensure redirects can only be relative URLS to improve security. (Prevents redirects to bad sites)
-        if (substr($redirectParam, 0, 1) !== '/') {
-            $redirectParam = null;
-        }
-
         $username = trim(filter_var($requestBody['username'], FILTER_SANITIZE_STRING));
         $password = filter_var($requestBody['password'], FILTER_SANITIZE_STRING);
 
