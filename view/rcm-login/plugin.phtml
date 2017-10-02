@@ -12,9 +12,9 @@ $this->rcmTextEdit(
 
 <div class="loginContent">
     <form class="loginForm  rcm-login-form"
-          action="<?= $this->escapeHtml($_SERVER['REQUEST_URI']) ?>"
+          action="/rcm-login/login-form-submit-handler"
           method="post"
-        >
+    >
         <?=
         $this->rcmTextEdit(
             'userNameCopy',
@@ -23,9 +23,11 @@ $this->rcmTextEdit(
             array('for' => 'rcmLoginUsername')
         ) ?>
         <br>
-        <input type="hidden" name="rcmPluginName" value="RcmLogin">
+        <input type="hidden"
+               name="redirect"
+               value="<?= $this->escapeHtmlAttr($redirect) ?>">
         <input autofocus type="text" name="username"
-               value="<?= $this->escapeHtml($username) ?>">
+               value="<?= $this->escapeHtmlAttr($username) ?>">
         <br>
         <?=
         $this->rcmTextEdit(

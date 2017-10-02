@@ -33,36 +33,4 @@ class Module
     {
         return include __DIR__ . '/../config/module.config.php';
     }
-
-    /**
-     * Bootstrap For Login.
-     *
-     * @param MvcEvent $event Zend MVC Event
-     *
-     * @return null
-     */
-    public function onBootstrap(MvcEvent $event)
-    {
-        $serviceManager = $event->getApplication()->getServiceManager();
-
-        //Add Login Event Listener
-        try {
-            $loginEventListener = $serviceManager->get(
-                'RcmLogin\EventListener\Login'
-            );
-        } catch (ServiceNotFoundException $e) {
-            return;
-        }
-
-        /** @var \Zend\EventManager\EventManager $eventManager */
-        $eventManager = $event->getApplication()->getEventManager()->getSharedManager();
-
-        // Check for redirects from the CMS
-        $eventManager->attach(
-            'RcmLogin\Controller\PluginController',
-            'LoginSuccessEvent',
-            [$loginEventListener, 'loginSuccess'],
-            10000
-        );
-    }
 }
