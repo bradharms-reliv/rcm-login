@@ -3,7 +3,7 @@
 namespace RcmLogin\Email;
 
 use RcmLogin\Entity\ResetPassword;
-use RcmUser\User\Entity\User;
+use RcmUser\User\Entity\UserInterface;
 use Zend\Mail\Exception\InvalidArgumentException;
 use Zend\Mail\Message;
 use Zend\Mime\Message as MimeMessage;
@@ -28,14 +28,14 @@ class DefaultMailer implements Mailer
      * send
      *
      * @param ResetPassword $resetPassword
-     * @param User $user
+     * @param UserInterface $user
      * @param array $mailConfig
      *
      * @return mixed
      */
     public function sendRestPasswordEmail(
         ResetPassword $resetPassword,
-        User $user,
+        UserInterface $user,
         $mailConfig
     ) {
         $toEmail = $user->getEmail();
