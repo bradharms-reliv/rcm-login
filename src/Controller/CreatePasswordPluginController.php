@@ -40,11 +40,11 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
     /**
      * CreatePasswordPluginController constructor.
      *
-     * @param EntityManager        $entityManager
-     * @param null                 $config
-     * @param RcmUserService       $rcmUserService
+     * @param EntityManager $entityManager
+     * @param null $config
+     * @param RcmUserService $rcmUserService
      * @param InputFilterInterface $createPasswordInputFilter
-     * @param string               $pluginName \
+     * @param string $pluginName \
      */
     public function __construct(
         EntityManager $entityManager,
@@ -80,7 +80,7 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
     /**
      * Plugin Action - Returns the guest-facing view model for this plugin
      *
-     * @param int   $instanceId     plugin instance id
+     * @param int $instanceId plugin instance id
      * @param array $instanceConfig Instance Config
      *
      * @return \Zend\View\Model\ViewModel
@@ -119,11 +119,20 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
             return $this->notAuthorized();
         }
 
+        $user = $this->rcmUserService->buildNewUser();
+        $user->setId($passwordEntity->getUserId());
+        $result = $this->rcmUserService->readUser($user);
+        $user = $result->getUser();
+
+        if (!$result->isSuccess()) {
+            return $instanceConfig['translate']['invalidLink'];
+        }
+
         if ($this->postIsForThisPlugin()) {
             $error = $this->handlePostForCreatePassword(
                 $form,
                 $instanceConfig,
-                $passwordEntity->getUserId()
+                $user
             );
 
             if (!$error) {
@@ -158,8 +167,8 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
      * handlePost
      *
      * @param CreateNewPasswordForm $form
-     * @param array                 $instanceConfig
-     * @param string                $userId
+     * @param array $instanceConfig
+     * @param string $userId
      *
      * @return null
      * @throws \Exception
@@ -167,7 +176,7 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
     protected function handlePostForCreatePassword(
         CreateNewPasswordForm $form,
         $instanceConfig,
-        $userId
+        $user
     ) {
         $form->setInputFilter($this->getCreatePasswordInputFilter());
         $form->setData($this->getRequest()->getPost());
@@ -182,16 +191,6 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
                 return $instanceConfig['translate']['passwordsDoNotMatch'];
             }
 
-            $user = $this->rcmUserService->buildNewUser();
-            $user->setId($userId);
-
-            $result = $this->rcmUserService->readUser($user);
-
-            if (!$result->isSuccess()) {
-                return $instanceConfig['translate']['invalidLink'];
-            }
-
-            $user = $result->getUser();
             $user->setPassword($newPasswordTwo);
 
             $result = $this->rcmUserService->updateUser($user);
