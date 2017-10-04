@@ -55,13 +55,16 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
      */
     protected $logger;
 
+    const COULD_NOT_RESET_PASSWORD_MESSAGE = 'Your password could not be reset.'
+    . ' Either we could not find your account, or your account does not have an email on file.';
+
     /**
-     * @param EntityManager        $entityManager
-     * @param null                 $config
-     * @param Mailer               $mailer
-     * @param RcmUserService       $rcmUserManager
+     * @param EntityManager $entityManager
+     * @param null $config
+     * @param Mailer $mailer
+     * @param RcmUserService $rcmUserManager
      * @param InputFilterInterface $resetPasswordInputFilter
-     * @param LoggerInterface      $logger
+     * @param LoggerInterface $logger
      */
     public function __construct(
         EntityManager $entityManager,
@@ -100,7 +103,7 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
     /**
      * Plugin Action - Returns the guest-facing view model for this plugin
      *
-     * @param int   $instanceId     plugin instance id
+     * @param int $instanceId plugin instance id
      * @param array $instanceConfig Instance Config
      *
      * @return \Zend\View\Model\ViewModel
@@ -174,7 +177,7 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
                 self::class . ': Invalid ResetPasswordForm form with messages: ' . json_encode($form->getMessages())
             );
 
-            return 'ACCOUNT_NOT_FOUND';
+            return self::COULD_NOT_RESET_PASSWORD_MESSAGE;
         }
 
         $formData = $form->getData();
@@ -190,7 +193,7 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
                 self::class . ': User not found with id: ' . $userId
             );
 
-            return 'ACCOUNT_NOT_FOUND';
+            return self::COULD_NOT_RESET_PASSWORD_MESSAGE;
         }
 
         $user = $result->getUser();
@@ -199,7 +202,7 @@ class ResetPasswordPluginController extends CreatePasswordPluginController imple
                 self::class . ": User ({$user->getId()}) has no email "
             );
 
-            return 'ACCOUNT_NOT_FOUND';
+            return self::COULD_NOT_RESET_PASSWORD_MESSAGE;
         }
 
         $resetPw->setUserId($user->getId());
