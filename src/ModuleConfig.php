@@ -3,9 +3,7 @@
 namespace RcmLogin;
 
 use RcmLogin\Controller\LoginFormSubmitHandler;
-use RcmLogin\Validator\RedirectValidator;
 use RcmUser\Service\RcmUserService;
-use Zend\EventManager\EventManager;
 
 class ModuleConfig
 {
