@@ -8,7 +8,6 @@ $this->headLink()->appendStylesheet(
     <input name="rcmPluginName" type="hidden" value="RcmCreateNewPassword">
 
     <table style="border:0;" width="310">
-
         <tr>
             <td colspan="2">
                 <div data-richEdit="top">
@@ -55,10 +54,10 @@ $this->headLink()->appendStylesheet(
                 </tr>
                 <tr>
                     <td>
-                        <label><?= $this->instanceConfig['passwordLabel'] ?></label>
+                        <label for="password"><?= $this->translate('New Password') ?></label>
                     </td>
                     <td style="width:33%">
-                        <input name="password"/>
+                        <input id="password" type="password" name="password"/>
                     </td>
                 </tr>
                 <tr>
@@ -74,10 +73,10 @@ $this->headLink()->appendStylesheet(
                 </tr>
                 <tr>
                     <td>
-                        <label><?= $this->instanceConfig['passwordTwoLabel'] ?></label>
+                        <label for="passwordTwo"><?= $this->translate('Verify Password') ?></label>
                     </td>
                     <td style="width:33%">
-                        <input name="passwordTwo"/>
+                        <input id="passwordTwo" type="password" name="passwordTwo"/>
                     </td>
                 </tr>
                 <tr>
@@ -96,7 +95,6 @@ $this->headLink()->appendStylesheet(
                         <span data-textEdit="button"><?= $this->translate('Submit') ?></span>
                     </button>
                 </td>
-
             <?php endif ?>
         <?php endif ?>
 
