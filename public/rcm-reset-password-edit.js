@@ -122,7 +122,7 @@ var RcmResetPasswordEdit = function (instanceId, container, pluginHandler) {
 
         tabsDiv.find('#tabs-form')
             .append('<h2>Translations:</h2>')
-            .appendMulti(inputGroups['translate'])
+            .appendMulti(inputGroups['translate']);
 
         tabsDiv.tabs();
 
