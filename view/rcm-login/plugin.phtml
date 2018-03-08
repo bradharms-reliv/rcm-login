@@ -25,9 +25,9 @@ $this->rcmTextEdit(
         <br>
         <input type="hidden"
                name="redirect"
-               value="<?= $this->escapeHtmlAttr($redirect) ?>">
+               value="<?= $this->escapeHtmlAttr($redirect) ?>"/>
         <input autofocus type="text" name="username"
-               value="<?= $this->escapeHtmlAttr($username) ?>">
+               value="<?= $this->escapeHtmlAttr($username) ?>"/>
         <br>
         <?=
         $this->rcmTextEdit(
@@ -37,7 +37,7 @@ $this->rcmTextEdit(
             array('for' => 'rcmLoginPassword')
         ) ?>
         <br>
-        <input type="password" name="password">
+        <input type="password" name="password"/>
         <br>
         <br>
         <button class="loginButton btn btn-primary" type="submit">
