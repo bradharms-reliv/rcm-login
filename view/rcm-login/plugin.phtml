@@ -23,14 +23,9 @@ $this->rcmTextEdit(
             array('for' => 'rcmLoginUsername')
         ) ?>
         <br>
-        <input type="hidden"
-               name="redirect"
-               value="<?= $this->escapeHtmlAttr($redirect) ?>"/>
-        <input type="hidden"
-               name="csrf"
-               value="<?= $this->escapeHtmlAttr($csrf) ?>"/>
-        <input autofocus type="text" name="username"
-               value="<?= $this->escapeHtmlAttr($username) ?>"/>
+        <input type="hidden" name="redirect" value="<?= $this->escapeHtmlAttr($redirect) ?>"/>
+        <input type="hidden" name="csrf" value="<?= $this->escapeHtmlAttr($csrf) ?>"/>
+        <input autofocus type="text" name="username" value="<?= $this->escapeHtmlAttr($username) ?>"/>
         <br>
         <?=
         $this->rcmTextEdit(
