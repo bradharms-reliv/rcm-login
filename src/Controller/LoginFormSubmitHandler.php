@@ -69,7 +69,7 @@ class LoginFormSubmitHandler implements MiddlewareInterface
             return new HtmlResponse('400 Bad Request - Missing a body field', 400);
         }
 
-        if(!$this->csrfValidator->isValid($requestBody['csrf'])){
+        if (!$this->csrfValidator->isValid($requestBody['csrf'])) {
             return new HtmlResponse('400 Bad Request - Invalid CSRF value', 400);
         }
 
