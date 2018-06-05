@@ -12,6 +12,7 @@ use Zend\Diactoros\Response\RedirectResponse;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManager;
 use Zend\Authentication\Result;
+use Zend\Validator\Csrf;
 
 class LoginFormSubmitHandler implements MiddlewareInterface
 {
@@ -27,6 +28,8 @@ class LoginFormSubmitHandler implements MiddlewareInterface
 
     protected $redirectWhitelistRegex;
 
+    protected $csrfValidator;
+
     /**
      * LoginFormSubmitHandler constructor.
      * @param RcmUserService $rcmUserService
@@ -39,6 +42,7 @@ class LoginFormSubmitHandler implements MiddlewareInterface
     public function __construct(
         RcmUserService $rcmUserService,
         EventManager $eventManager,
+        Csrf $csrfValidator,
         $loginFormUrl = '/login',
         $afterLoginSuccessUrl = '/login-home',
         $disabledAccountUrl = '/account-issue',
@@ -46,6 +50,7 @@ class LoginFormSubmitHandler implements MiddlewareInterface
     ) {
         $this->rcmUserService = $rcmUserService;
         $this->eventManager = $eventManager;
+        $this->csrfValidator = $csrfValidator;
         $this->loginFormUrl = $loginFormUrl;
         $this->afterLoginSuccessUrl = $afterLoginSuccessUrl;
         $this->disabledAccountUrl = $disabledAccountUrl;
@@ -59,8 +64,13 @@ class LoginFormSubmitHandler implements MiddlewareInterface
         if (!array_key_exists('redirect', $requestBody)
             || !array_key_exists('username', $requestBody)
             || !array_key_exists('password', $requestBody)
+            || !array_key_exists('csrf', $requestBody)
         ) {
-            return new HtmlResponse('400 Bad Request', 400);
+            return new HtmlResponse('400 Bad Request - Missing a body field', 400);
+        }
+
+        if(!$this->csrfValidator->isValid($requestBody['csrf'])){
+            return new HtmlResponse('400 Bad Request - Invalid CSRF value', 400);
         }
 
         $redirectParam = filter_var($requestBody['redirect']);

@@ -119,6 +119,8 @@ return [
             /* over-ride this for logging */
             \RcmLogin\Log\Logger::class
             => \RcmLogin\Log\LoggerNoneFactory::class,
+
+            'Rcmlogin\Validator\Csrf' => \RcmLogin\Factory\CsrfValidatorFactory::class
         ],
         'invokables' => [
             'RcmLogin\Form\LabelHelper' => 'RcmLogin\Form\LabelHelper',
