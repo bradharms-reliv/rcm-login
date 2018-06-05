@@ -8,6 +8,7 @@ use RcmUser\Service\RcmUserService;
 use Zend\Authentication\Result;
 use Zend\EventManager\Event;
 use Zend\Stdlib\ResponseInterface;
+use Zend\Validator\Csrf;
 
 class PluginController extends BaseController implements PluginInterface
 {
@@ -15,6 +16,18 @@ class PluginController extends BaseController implements PluginInterface
         'missing',
         'invalid'
     ];
+
+    protected $csrfValidator;
+
+    public function __construct(
+        $config,
+        Csrf $csrfValidator,
+        $pluginName = null,
+        $serviceLocator = null
+    ) {
+        parent::__construct($config, $pluginName, $serviceLocator);
+        $this->csrfValidator = $csrfValidator;
+    }
 
     /**
      * renderInstance
@@ -42,7 +55,8 @@ class PluginController extends BaseController implements PluginInterface
             [
                 'error' => $error,
                 'username' => $requestData['username'],
-                'redirect' => $requestData['redirect']
+                'redirect' => $requestData['redirect'],
+                'csrf' => $this->csrfValidator->getHash()
             ]
         );
 

@@ -17,6 +17,7 @@ class ModuleConfig
                         'arguments' => [
                             RcmUserService::class,
                             'EventManager',
+                            'Rcmlogin\Validator\Csrf'
                         ]
                     ]
                 ]

@@ -30,7 +30,8 @@ class PluginControllerFactory implements FactoryInterface
         $serviceLocator = $cm->getServiceLocator();
 
         return new PluginController(
-            $serviceLocator->get('config')
+            $serviceLocator->get('config'),
+            $serviceLocator->get('Rcmlogin\Validator\Csrf')
         );
 
         return $controller;
