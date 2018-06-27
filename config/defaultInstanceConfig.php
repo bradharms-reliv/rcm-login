@@ -3,7 +3,6 @@ return [
     'translate' => [
         'invalid' => 'Incorrect Username or Password',
         'missing' => 'Missing Username or Password.',
-        'systemFailure' => 'There was an error logging you in. Please try
-        again.'
+        'systemFailure' => 'An error occurred. Please try again.'
     ],
 ];

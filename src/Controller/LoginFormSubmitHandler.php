@@ -67,17 +67,23 @@ class LoginFormSubmitHandler implements MiddlewareInterface
             || !array_key_exists('password', $requestBody)
             || !array_key_exists('csrf', $requestBody)
         ) {
-            return new HtmlResponse('400 Bad Request - Missing a body field', 400);
+            return new RedirectResponse(
+                $this->loginFormUrl . '?errorCode=systemFailure&detailedErrorCode=requestMissingBodyField'
+                . '&redirect=' . $redirectParam
+            );
         }
-
-        if (!$this->csrfValidator->isValid($requestBody['csrf'])) {
-            return new HtmlResponse('400 Bad Request - Invalid CSRF value', 400);
-        }
-
-        $redirectParam = filter_var($requestBody['redirect']);
 
         $username = trim(filter_var($requestBody['username'], FILTER_SANITIZE_STRING));
         $password = filter_var($requestBody['password'], FILTER_SANITIZE_STRING);
+        $redirectParam = filter_var($requestBody['redirect']);
+
+        if (!$this->csrfValidator->isValid($requestBody['csrf'])) {
+            return new RedirectResponse(
+                $this->loginFormUrl . '?errorCode=systemFailure&detailedErrorCode=invalidCsrfToken'
+                . '&username=' . urlencode($username)
+                . '&redirect=' . $redirectParam
+            );
+        }
 
         if (empty($username) || empty($password)) {
             return new RedirectResponse(

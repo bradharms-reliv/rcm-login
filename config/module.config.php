@@ -71,6 +71,7 @@ return [
                 '/defaultInstanceConfig.php',
             'canCache' => false,
             'redirectBlacklistPattern' => '/.+:\/\/|\/\//i',
+            'csrfTimeoutSeconds' => 60 * 60 * 24 * 30 // thirty days worth of seconds
         ],
         'RcmResetPassword' => [
             'type' => 'Common',

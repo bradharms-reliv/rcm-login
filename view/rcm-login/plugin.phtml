@@ -1,3 +1,4 @@
+<?= isset($error) ? '<div class="alert alert-warning">' . $this->escapeHtml($error) . '</div>' : '' ?>
 <?=
 $this->rcmTextEdit(
     'loginHeader',
@@ -5,10 +6,6 @@ $this->rcmTextEdit(
     'h1'
 )
 ?>
-
-<div class="error">
-    <?= isset($error) ? $this->escapeHtml($error) : '' ?>
-</div>
 
 <div class="loginContent">
     <form class="loginForm  rcm-login-form"

@@ -12,6 +12,9 @@ class CsrfValidatorFactory
     {
         $sessionContainer = new Container(self::class, $serviceContainer->get(SessionManager::class));
 
-        return new Csrf(['session' => $sessionContainer]);
+        return new Csrf([
+            'session' => $sessionContainer,
+            'timeout' => $serviceContainer->get('config')['rcmPlugin']['RcmLogin']['csrfTimeoutSeconds']
+        ]);
     }
 }
