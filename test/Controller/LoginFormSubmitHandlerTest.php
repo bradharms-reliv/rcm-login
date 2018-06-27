@@ -15,7 +15,7 @@ use \Mockery;
 
 class LoginFormSubmitHandlerTest extends TestCase
 {
-    public function testReturns400ResponseWhenCsrfInvalid()
+    public function testReturnsRedirectResponseWhenCsrfInvalid()
     {
         $invalidCSrfValue = 'asdfhas787dfhas8d76fhas8f';
 
@@ -36,7 +36,6 @@ class LoginFormSubmitHandlerTest extends TestCase
 
         $response = $unit->process($request, Mockery::mock(DelegateInterface::class));
 
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals('400 Bad Request - Invalid CSRF value', $response->getBody());
+        $this->assertEquals(302, $response->getStatusCode());
     }
 }
