@@ -15,7 +15,8 @@ class PluginController extends BaseController implements PluginInterface
     protected $errorCodeWhiteList = [
         'missing',
         'invalid',
-        'systemFailure'
+        'systemFailure',
+        'unauthorized'
     ];
 
     protected $csrfValidator;
