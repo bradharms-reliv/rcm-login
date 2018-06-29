@@ -9,13 +9,13 @@ use Zend\Diactoros\Response\RedirectResponse;
 
 /**
  * Middleware that conditionally redirects the user to the login page.
- * 
+ *
  * Inject a callable object into this. When processing a request, it will be
  * called, passing in the the request. If the callable returns false, the user
  * will be redirected to the login page with a message indicating the user is
  * not allowed to view the page and will be redirected back to the first page
  * after logging in.
- * 
+ *
  * Callables can be function names, PHP "callable arrays", objects with the
  * __invoke() method, or anything else PHP considers to be callable.
  */
