@@ -104,7 +104,7 @@ class LoginFormSubmitHandler implements MiddlewareInterface
         if (!$authResult->isValid()) {
             /**
              * Used for times when we want to tell them their username and password were good but there account has been
-             * disabled for some other reasion.
+             * disabled for some other reason.
              */
             if ($authResult->getCode() == Result::FAILURE_UNCATEGORIZED
                 && !empty($this->disabledAccountUrl)
