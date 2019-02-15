@@ -7,13 +7,13 @@ use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use RcmLogin\Csrf\CsrfValidator;
 use RcmUser\Service\RcmUserService;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\Response\RedirectResponse;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManager;
 use Zend\Authentication\Result;
-use Zend\Validator\Csrf;
 
 class LoginFormSubmitHandler implements MiddlewareInterface
 {
@@ -43,7 +43,7 @@ class LoginFormSubmitHandler implements MiddlewareInterface
     public function __construct(
         RcmUserService $rcmUserService,
         EventManager $eventManager,
-        Csrf $csrfValidator,
+        CsrfValidator $csrfValidator,
         $loginFormUrl = '/login',
         $afterLoginSuccessUrl = '/login-home',
         $disabledAccountUrl = '/account-issue',

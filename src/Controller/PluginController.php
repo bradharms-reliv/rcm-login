@@ -4,11 +4,11 @@ namespace RcmLogin\Controller;
 
 use Rcm\Plugin\PluginInterface;
 use Rcm\Plugin\BaseController;
+use RcmLogin\Csrf\CsrfValidator;
 use RcmUser\Service\RcmUserService;
 use Zend\Authentication\Result;
 use Zend\EventManager\Event;
 use Zend\Stdlib\ResponseInterface;
-use Zend\Validator\Csrf;
 
 class PluginController extends BaseController implements PluginInterface
 {
@@ -23,7 +23,7 @@ class PluginController extends BaseController implements PluginInterface
 
     public function __construct(
         $config,
-        Csrf $csrfValidator,
+        CsrfValidator $csrfValidator,
         $pluginName = null,
         $serviceLocator = null
     ) {
