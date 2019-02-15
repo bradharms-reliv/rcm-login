@@ -17,7 +17,6 @@ use Zend\Validator\AbstractValidator;
  * See "BEGIN CODE MODIFIED FROM ZEND" below
  *
  * Class CsrfValidator
- * @package Zend\Validator
  */
 class CsrfValidator extends AbstractValidator
 {
@@ -230,7 +229,7 @@ class CsrfValidator extends AbstractValidator
     {
         //BEGIN CODE MODIFIED FROM ZEND
         if (null === $this->hash) {
-            $this->hash = $session = $this->getSession()->hash;
+            $this->hash = $this->getSession()->hash;
         }
         //END CODE MODIFIED FROM ZEND
 
