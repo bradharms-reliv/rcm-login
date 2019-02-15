@@ -3,16 +3,16 @@
 namespace RcmLogin\Factory;
 
 use Rcm\Service\SessionManager;
+use RcmLogin\Csrf\CsrfValidator;
 use Zend\Session\Container;
-use Zend\Validator\Csrf;
 
 class CsrfValidatorFactory
 {
     public function __invoke($serviceContainer)
     {
-        $sessionContainer = new Container(self::class, $serviceContainer->get(SessionManager::class));
+        $sessionContainer = new Container('RcmLogin\Csrf', $serviceContainer->get(SessionManager::class));
 
-        return new Csrf([
+        return new CsrfValidator([
             'session' => $sessionContainer,
             'timeout' => $serviceContainer->get('config')['rcmPlugin']['RcmLogin']['csrfTimeoutSeconds']
         ]);
