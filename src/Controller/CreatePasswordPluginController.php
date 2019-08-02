@@ -115,7 +115,8 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
 
         $createdDate = $passwordEntity->getCreatedDate();
 
-        if (strtotime("now") - $createdDate->getTimeStamp() > 172800) {
+        //7200 seconds is 2 hours
+        if (strtotime("now") - $createdDate->getTimeStamp() > 7200) {
             return $this->notAuthorized();
         }
 
@@ -138,8 +139,12 @@ class CreatePasswordPluginController extends BaseController implements PluginInt
             if (!$error) {
                 $postSuccess = true;
 
-                $this->entityMgr->remove($passwordEntity);
-                $this->entityMgr->flush();
+                /**
+                 * Disabled by Rod Mcnew on 2019-08-02 as an interm solution to duplicate rendering
+                 * Also set the expiration time to a much lower "2 hours".
+                 */
+//                $this->entityMgr->remove($passwordEntity);
+//                $this->entityMgr->flush();
             }
         }
 
